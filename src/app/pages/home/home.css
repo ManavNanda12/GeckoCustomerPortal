@@ -1,0 +1,65 @@
+/* Hero Section */
+.hero {
+  position: relative;
+  height: 70vh;
+  background: url('../../../assets/bannerImages/MainBanner.jpg') no-repeat center center/cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-overlay {
+  background: rgba(30, 30, 47, 0.7);
+  text-align: center;
+  color: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.hero-sub {
+  font-size: 1.2rem;
+  margin-top: 1rem;
+}
+
+
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 1s ease forwards;
+  opacity: 0;
+}
+
+.animate-fade-down {
+  animation: fadeDown 1s ease forwards;
+  opacity: 0;
+}
+
+.animate-fade-up {
+  animation: fadeUp 1s ease forwards;
+  opacity: 0;
+}
+
+/* delays for cards */
+.delay-1 { animation-delay: 0.3s; }
+.delay-2 { animation-delay: 0.6s; }

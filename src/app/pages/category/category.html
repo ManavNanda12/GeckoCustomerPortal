@@ -1,0 +1,44 @@
+<section
+  class="categories container py-5 parent-section"
+  *ngIf="parentCategories.length > 0 && selectedCategory === null"
+  [class.animate-out]="animateParentOut"
+>
+  <h2 class="section-title text-center mb-5">Explore Categories</h2>
+  <div class="row g-4">
+    <div class="col-md-4 col-sm-6" *ngFor="let cat of parentCategories">
+      <div class="category-card" (click)="showSubCategories(cat)">
+        <img [src]="cat.imageUrl" alt="{{cat.categoryName}}" (error)="handleImageError(cat)" class="category-img" />
+        <div class="category-body">
+          <h5>{{ cat.categoryName }}</h5>
+          <p>{{ cat.categoryName }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section
+  class="categories container py-5 child-section"
+  *ngIf="childCategories.length > 0 && selectedCategory !== null"
+  [class.animate-in]="animateChildIn"
+>
+  <div class="d-flex justify-content-between align-items-center mb-5">
+    <h2 class="section-title">{{selectedCategory.categoryName}} Categories</h2>
+    <button class="close-btn" (click)="closeChildCategories()">
+      <mat-icon>cancel</mat-icon>
+    </button>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-4 col-sm-6" *ngFor="let cat of childCategories">
+      <div class="category-card">
+        <img [src]="cat.imageUrl" alt="{{cat.categoryName}}" (error)="handleImageError(cat)" class="category-img" />
+        <div class="category-body">
+          <h5>{{ cat.categoryName }}</h5>
+          <p>{{ cat.categoryName }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

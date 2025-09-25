@@ -1,0 +1,84 @@
+.app-footer {
+  background: #1e1e2f;
+  color: #bbb;
+  padding: 2rem 1rem;
+  text-align: center;
+  position: relative;
+  margin-top: auto;
+  box-shadow: 0 -3px 8px rgba(0,0,0,0.4);
+}
+
+.footer-content {
+  max-width: 1000px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+/* Logo / Brand */
+.footer-logo {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #fff;
+}
+
+/* Footer links */
+.footer-links {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-links li {
+  position: relative;
+}
+
+.footer-links a {
+  color: #bbb;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+/* underline animation */
+.footer-links a::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #ff6b6b, #f06595, #845ef7);
+  transition: width 0.4s ease;
+}
+
+.footer-links a:hover {
+  color: #fff;
+}
+
+.footer-links a:hover::after {
+  width: 100%;
+}
+
+/* Social icons */
+.footer-social {
+  display: flex;
+  gap: 1rem;
+}
+
+.footer-social a {
+  font-size: 1.3rem;
+  color: #bbb;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.footer-social a:hover {
+  color: #fff;
+  transform: translateY(-4px) scale(1.1);
+  text-shadow: 0 0 6px rgba(255,255,255,0.6);
+}

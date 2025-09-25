@@ -1,0 +1,22 @@
+/* Add this at the top of your file or to your main layout container */
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ...existing code... */
+.main-content {
+  flex: 1;
+  padding: 1rem;
+  background: #f5f5f5; /* light background for main content */
+}
+
+app-footer {
+  background: #1e1e2f;
+  color: #bbb;
+  padding: 2rem 1rem;
+  text-align: center;
+  box-shadow: 0 -3px 8px rgba(0,0,0,0.4);
+  margin-top: auto;
+}
