@@ -1,0 +1,19 @@
+<div class="main-content">
+    <!-- Background Video -->
+    <video autoplay muted loop playsinline class="bg-video">
+      <source src="/assets/videos/gym-bg.mp4" type="video/mp4" />
+    </video>
+  
+    <!-- Content Overlay -->
+    <div class="content-overlay">
+      <div class="login-box">
+        <form [formGroup]="loginForm" (ngSubmit)="submitLoginForm()">
+        <h2>Welcome Back</h2>
+        <input type="email" placeholder="Email" class="email-input" formControlName="email"/>
+        <input type="password" placeholder="Password" class="password-input" formControlName="password"/>
+        <button type="submit">Login</button>
+      </form>
+      </div>
+    </div>
+  </div>
+  

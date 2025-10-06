@@ -10,7 +10,7 @@ import { ApiUrlHelper } from '../common/ApiUrlHelper';
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly TOKEN_KEY = 'auth_token';
+  private readonly TOKEN_KEY = 'JwtToken';
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasToken());
   
   // Store the URL so we can redirect after logging in

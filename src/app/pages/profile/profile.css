@@ -1,0 +1,140 @@
+.profile-layout {
+    display: flex;
+    min-height: 80vh;
+  }
+  
+  .side-tabs {
+    display: flex;
+    flex-direction: column;
+    background: #1e1e1e;
+    padding: 20px;
+    width: 200px;
+    border-right: 2px solid #333;
+  }
+  
+  .side-tabs button {
+    background: transparent;
+    border: none;
+    color: #bbb;
+    padding: 12px;
+    margin: 5px 0;
+    text-align: left;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .side-tabs button.active,
+  .side-tabs button:hover {
+    color: #ff9800;
+    font-weight: bold;
+  }
+  
+  .tab-content-wrapper {
+    flex-grow: 1;
+    padding: 30px;
+    color: #eee;
+  }
+  
+  .tab-content {
+    background: rgba(40, 40, 40, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  /* Animation Classes */
+  .fadeIn {
+    animation: fadeIn 0.6s ease;
+  }
+  
+  .slideInRight {
+    animation: slideInRight 0.5s ease;
+  }
+  
+  .bounceIn {
+    animation: bounceIn 0.7s ease;
+  }
+  
+  .zoomIn {
+    animation: zoomIn 0.5s ease;
+  }
+  
+  .flipIn {
+    animation: flipIn 0.6s ease;
+  }
+  
+  .slideInUp {
+    animation: slideInUp 0.5s ease;
+  }
+  
+  .rotateIn {
+    animation: rotateIn 0.6s ease;
+  }
+  
+  .expandIn {
+    animation: expandIn 0.5s ease;
+  }
+  
+  /* Keyframe Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(100px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  
+  @keyframes bounceIn {
+    0% { opacity: 0; transform: scale(0.3); }
+    50% { opacity: 1; transform: scale(1.05); }
+    70% { transform: scale(0.9); }
+    100% { transform: scale(1); }
+  }
+  
+  @keyframes zoomIn {
+    from { opacity: 0; transform: scale(0.5); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  
+  @keyframes flipIn {
+    from { 
+      opacity: 0; 
+      transform: perspective(400px) rotateY(-90deg);
+    }
+    to { 
+      opacity: 1; 
+      transform: perspective(400px) rotateY(0);
+    }
+  }
+  
+  @keyframes slideInUp {
+    from { opacity: 0; transform: translateY(100px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes rotateIn {
+    from { 
+      opacity: 0; 
+      transform: rotate(-200deg) scale(0.5);
+    }
+    to { 
+      opacity: 1; 
+      transform: rotate(0) scale(1);
+    }
+  }
+  
+  @keyframes expandIn {
+    0% { 
+      opacity: 0; 
+      transform: scale(0) rotate(-180deg);
+    }
+    60% { 
+      transform: scale(1.1) rotate(20deg);
+    }
+    100% { 
+      opacity: 1; 
+      transform: scale(1) rotate(0);
+    }
+  }

@@ -1,12 +1,21 @@
 <div class="main-layout">
     <!-- Header -->
     <app-header></app-header>
-
-    <!-- Main outlet -->
-    <div class="main-content">
+  
+    <!-- Main outlet with video background -->
+    <div class="main-content mt-5">
+      <!-- Background Video -->
+      <video autoplay muted loop playsinline class="bg-video" [muted]="true">
+        <source src="/assets/videos/gym-bg.mp4" type="video/mp4"/>
+      </video>
+  
+      <!-- Routed content -->
+      <div class="content-overlay">
         <router-outlet></router-outlet>
+      </div>
     </div>
-
+  
     <!-- Footer -->
     <app-footer></app-footer>
-</div>
+  </div>
+  

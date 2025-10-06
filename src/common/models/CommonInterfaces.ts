@@ -12,6 +12,7 @@ export interface ProductResponse{
     price: number;
     productImage: string | null;
     categoryID: number;
+    categoryName: string;
     totalRecords: number;
     sku:string;
 }

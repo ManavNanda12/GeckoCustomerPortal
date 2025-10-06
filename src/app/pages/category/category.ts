@@ -6,6 +6,7 @@ import { Common } from '../../../services/common';
 import { CategoryResponse, gymImages } from '../../../common/models/CommonInterfaces';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-category',
@@ -27,7 +28,8 @@ export class Category {
     private readonly api: ApiUrlHelper,
     private readonly common: Common,
     private readonly spinner: NgxSpinnerService,
-    private readonly toastr: ToastrService
+    private readonly toastr: ToastrService,
+    private readonly router: Router
   ) {
     this.getCategoryList();
    }
@@ -87,6 +89,10 @@ export class Category {
         }
       });
     }, 600);
+  }
+
+  showProducts(category: CategoryResponse) {
+    this.router.navigate([`/products/${category.categoryId}`])
   }
   
 

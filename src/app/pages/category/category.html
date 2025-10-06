@@ -6,17 +6,28 @@
   <h2 class="section-title text-center mb-5">Explore Categories</h2>
   <div class="row g-4">
     <div class="col-md-4 col-sm-6" *ngFor="let cat of parentCategories">
-      <div class="category-card" (click)="showSubCategories(cat)">
-        <img [src]="cat.imageUrl" alt="{{cat.categoryName}}" (error)="handleImageError(cat)" class="category-img" />
-        <div class="category-body">
-          <h5>{{ cat.categoryName }}</h5>
-          <p>{{ cat.categoryName }}</p>
+      <div class="category-card">
+        <img
+          [src]="cat.imageUrl"
+          alt="{{cat.categoryName}}"
+          (error)="handleImageError(cat)"
+          class="category-img"
+          (click)="showSubCategories(cat)"
+        />
+        <div
+          class="category-body d-flex justify-content-between align-items-center"
+        >
+          <h5 class="mb-0">{{ cat.categoryName }}</h5>
+
+          <button class="btn btn-animated-info d-flex align-items-center" (click)="showProducts(cat)">
+            <mat-icon class="me-1 icon-middle">shopping_cart</mat-icon>
+            <span class="text-middle">Products</span>
+          </button>
         </div>
       </div>
     </div>
   </div>
 </section>
-
 
 <section
   class="categories container py-5 child-section"
@@ -33,10 +44,22 @@
   <div class="row g-4">
     <div class="col-md-4 col-sm-6" *ngFor="let cat of childCategories">
       <div class="category-card">
-        <img [src]="cat.imageUrl" alt="{{cat.categoryName}}" (error)="handleImageError(cat)" class="category-img" />
-        <div class="category-body">
-          <h5>{{ cat.categoryName }}</h5>
-          <p>{{ cat.categoryName }}</p>
+        <img
+          [src]="cat.imageUrl"
+          alt="{{cat.categoryName}}"
+          (error)="handleImageError(cat)"
+          class="category-img"
+          (click)="showSubCategories(cat)"
+        />
+        <div
+          class="category-body d-flex justify-content-between align-items-center"
+        >
+          <h5 class="mb-0">{{ cat.categoryName }}</h5>
+
+          <button class="btn btn-animated-info d-flex align-items-center" (click)="showProducts(cat)">
+            <mat-icon class="me-1 icon-middle">shopping_cart</mat-icon>
+            <span class="text-middle">Products</span>
+          </button>
         </div>
       </div>
     </div>

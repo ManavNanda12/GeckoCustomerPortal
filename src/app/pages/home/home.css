@@ -1,65 +1,127 @@
-/* Hero Section */
+/* ================= HERO SECTION ================= */
 .hero {
   position: relative;
-  height: 70vh;
-  background: url('../../../assets/bannerImages/MainBanner.jpg') no-repeat center center/cover;
+  height: 85vh;
+  background: linear-gradient(-45deg, #0d0d1a, #1a1a2e, #222831, #0f0f1f);
+  background-size: 400% 400%;
+  animation: gradientMove 12s ease infinite;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .hero-overlay {
-  background: rgba(30, 30, 47, 0.7);
+  background: rgba(10, 10, 20, 0.75);
   text-align: center;
   color: #fff;
-  padding: 2rem;
-  border-radius: 10px;
+  padding: 3rem;
+  border-radius: 15px;
+  box-shadow: 0 0 35px rgba(0,0,0,0.8);
 }
 
+/* Hero Text */
 .hero-title {
-  font-size: 3rem;
-  font-weight: 700;
+  font-size: 3.8rem;
+  font-weight: 900;
   letter-spacing: 2px;
+  color: #e63946;
+  text-shadow: 0px 0px 20px rgba(230, 57, 70, 0.8);
 }
 
 .hero-sub {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   margin-top: 1rem;
+  color: #ddd;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-
-
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Hero Button */
+.btn-hero {
+  margin-top: 2rem;
+  padding: 14px 32px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  background: #e63946;
+  border: none;
+  color: #fff;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-@keyframes fadeDown {
-  from { opacity: 0; transform: translateY(-40px); }
-  to { opacity: 1; transform: translateY(0); }
+.btn-hero:hover {
+  transform: scale(1.1);
+  box-shadow: 0px 8px 25px rgba(230, 57, 70, 0.7);
 }
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(40px); }
-  to { opacity: 1; transform: translateY(0); }
+/* ================= FEATURES ================= */
+.features {
+  background: #111827;
+  color: #fff;
+  border-radius: 12px;
+  margin-top: -40px;
+  position: relative;
+  z-index: 2;
+  padding: 3rem 1rem;
 }
 
-.animate-fade-in {
-  animation: fadeIn 1s ease forwards;
+.feature-icon {
+  font-size: 3rem;
+  color: #e63946;
+  margin-bottom: 15px;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.feature-icon:hover {
+  transform: scale(1.2) rotate(8deg);
+  color: #ff4d6d;
+}
+
+.features h4 {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.features p {
+  font-size: 0.95rem;
+  color: #bbb;
+}
+
+/* ================= ANIMATIONS ================= */
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes magicZoom {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+    text-shadow: 0 0 0px rgba(230, 57, 70, 0.8);
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+    text-shadow: 0 0 20px rgba(230, 57, 70, 1);
+  }
+  70% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    text-shadow: 0 0 10px rgba(230, 57, 70, 0.9);
+  }
+}
+
+.animate-magic {
+  animation: magicZoom 1s ease forwards;
   opacity: 0;
 }
 
-.animate-fade-down {
-  animation: fadeDown 1s ease forwards;
-  opacity: 0;
-}
-
-.animate-fade-up {
-  animation: fadeUp 1s ease forwards;
-  opacity: 0;
-}
-
-/* delays for cards */
-.delay-1 { animation-delay: 0.3s; }
-.delay-2 { animation-delay: 0.6s; }
+.delay-1 { animation-delay: 0.4s; }
+.delay-2 { animation-delay: 0.8s; }

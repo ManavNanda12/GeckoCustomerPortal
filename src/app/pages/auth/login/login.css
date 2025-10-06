@@ -1,0 +1,126 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Poppins', sans-serif;
+    background: #000; /* fallback for no video */
+  }
+  
+  /* Main Layout */
+  .main-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .main-content {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+    height: 100vh;  /* full viewport height */
+    width: 100%;
+  }
+  
+  /* Background Video */
+  .bg-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+  
+  /* Overlay content */
+  .content-overlay {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* full centering */
+  }
+  
+  
+  /* Login Box */
+  .login-box {
+    background: rgba(20, 20, 20, 0.6);
+    backdrop-filter: blur(15px);
+    padding: 40px;
+    border-radius: 15px;
+    width: 350px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    text-align: center;
+    color: #fff;
+  }
+  
+  .login-box h2 {
+    margin-bottom: 25px;
+    font-size: 28px;
+    font-weight: 600;
+    color: #fff;
+  }
+  
+  /* Inputs */
+  .login-box input {
+    width: 100%;
+    padding: 12px;
+    margin: 15px 0;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    font-size: 16px;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .login-box input::placeholder {
+    color: #ccc;
+  }
+  
+  /* Button */
+  .login-box button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .login-box button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(37,117,252,0.6);
+  }
+  
+  /* Animations */
+  @keyframes bounceInLeft {
+    0% { transform: translateX(-300px); opacity: 0; }
+    60% { transform: translateX(30px); opacity: 1; }
+    80% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
+  }
+  
+  @keyframes bounceInRight {
+    0% { transform: translateX(300px); opacity: 0; }
+    60% { transform: translateX(-30px); opacity: 1; }
+    80% { transform: translateX(10px); }
+    100% { transform: translateX(0); }
+  }
+  
+  .email-input {
+    animation: bounceInLeft 1s ease forwards;
+  }
+  
+  .password-input {
+    animation: bounceInRight 1s ease forwards;
+    animation-delay: 0.2s;
+  }
+  

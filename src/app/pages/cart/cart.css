@@ -1,0 +1,244 @@
+/* Cart Container */
+.cart-container {
+    color: #fff;
+  }
+  
+  /* Title */
+  .cart-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #f5d4cd;
+  }
+  
+  /* Card */
+  .cart-card {
+    background: #1e1e2f;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .cart-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6);
+  }
+  
+  /* Image */
+  .cart-image {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+  }
+  
+  .cart-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  /* Body */
+  .cart-body {
+    padding: 1rem;
+  }
+  
+  .cart-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .cart-price {
+    color: #ff6b6b;
+    font-size: 1.1rem;
+    margin: 0.5rem 0;
+  }
+  
+  .cart-item-total {
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+  }
+  
+  /* Quantity Counter */
+  .quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0.5rem 0;
+  }
+  
+  .quantity-control button {
+    background: #f06595;
+    border: none;
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    transition: transform 0.2s;
+  }
+  
+  .quantity-control button:hover {
+    background: #ff6b6b;
+    transform: scale(1.1);
+  }
+  
+  .quantity-control span {
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
+  
+  /* Summary */
+  .cart-summary {
+    background: #252538;
+    padding: 1.5rem;
+    margin-top: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  }
+  
+  .text-highlight {
+    color: #ff6b6b;
+    font-weight: bold;
+  }
+  
+  @keyframes magicScale {
+    0% {
+      transform: scale(0.6);
+      opacity: 0;
+    }
+    60% {
+      transform: scale(1.1);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  .animate-scale {
+    animation: magicScale 0.6s ease forwards;
+  }
+
+  /* Description overlay effect */
+.cart-desc {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.4s ease;
+  }
+  
+  .cart-card:hover .cart-desc {
+    max-height: 80px; /* adjust based on description length */
+    opacity: 1;
+    transform: translateY(-5px);
+  }
+
+  .cart-card:hover .cart-desc {
+    max-height: 80px;
+    opacity: 1;
+    animation: fadeUpDesc 0.5s ease forwards;
+  }
+  
+  @keyframes fadeUpDesc {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Animated Button */
+.btn-animated-info {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    background-color: #17a2b8; 
+    color: #fff;
+  }
+  
+  .btn-animated-info:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+  }
+  
+  /* Optional shine effect */
+  .btn-animated-info::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.2);
+    transition: all 0.5s ease;
+    z-index: 0;
+  }
+  
+  .btn-animated-info:hover::after {
+    left: 0;
+  }
+
+  .no-products-icon {
+    font-size: 5rem;
+    color: #ff6b6b;
+    display: inline-block;
+    animation: smooth-bounce 1.5s infinite ease-in-out;
+  }
+  
+  @keyframes smooth-bounce {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px); /* peak of bounce */
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+  
+
+  /* After order Placed */
+  .celebration-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  #fireworksCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .congrats-box {
+    position: relative;
+    color: #fff;
+    text-align: center;
+    z-index: 10;
+    animation: pop-in 0.6s ease;
+  }
+  
+  .congrats-box h2 {
+    font-size: 2.5rem;
+    background: linear-gradient(90deg, #ff6b6b, #f9ca24, #00cec9, #6c5ce7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
