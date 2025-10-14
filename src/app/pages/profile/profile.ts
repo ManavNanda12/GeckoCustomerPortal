@@ -4,6 +4,9 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ApiUrlHelper } from '../../../common/ApiUrlHelper';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Common } from '../../../services/common';
+import { Orders } from './orders/orders';
 
 @Component({
   selector: 'app-profile',
@@ -11,7 +14,8 @@ import { ApiUrlHelper } from '../../../common/ApiUrlHelper';
     MatIconModule,
     CommonModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    Orders  
     ],
   templateUrl: './profile.html',
   styleUrl: './profile.css'
@@ -32,18 +36,22 @@ export class Profile implements OnInit {
     'rotateIn',
     'expandIn'
   ];
+  customerId!:number;
+  customerDetails!:any;
 
-  constructor(private readonly fb:FormBuilder , private readonly api:ApiUrlHelper){
+  constructor(private readonly fb:FormBuilder , private readonly api:ApiUrlHelper,
+              private readonly spinner:NgxSpinnerService , private readonly common:Common){
     
   }
 
   ngOnInit(): void {
     this.initializeProfileForm();
+    this.customerId = Number(localStorage.getItem('CustomerId')) || 0;
+    this.getCustomerDetails();
   }
 
   changeTab(tab: string) {
     if (this.activeTab !== tab) {
-      // Pick a random animation
       const randomIndex = Math.floor(Math.random() * this.animations.length);
       this.currentAnimation = this.animations[randomIndex];
       this.activeTab = tab;
@@ -63,12 +71,10 @@ export class Profile implements OnInit {
     this.isEditMode = !this.isEditMode;
     
     if (this.isEditMode) {
-      // Enable all fields except email
       this.profileForm.get('firstName')?.enable();
       this.profileForm.get('lastName')?.enable();
       this.profileForm.get('contactNumber')?.enable();
     } else {
-      // Disable all fields
       this.profileForm.get('firstName')?.disable();
       this.profileForm.get('lastName')?.disable();
       this.profileForm.get('contactNumber')?.disable();
@@ -78,12 +84,32 @@ export class Profile implements OnInit {
   onSubmit() {
     if (this.profileForm.valid) {
       console.log('Form submitted:', this.profileForm.getRawValue());
-      // Handle form submission here
-      this.toggleEdit(); // Switch back to view mode
+      this.toggleEdit();
     }
   }
 
   getCustomerDetails(){
-    let api = this.api.Customer.GetCustomerDetails;
+    this.spinner.show();
+    let api = this.api.Customer.GetCustomerDetails.replace('{customerId}',this.customerId.toString());
+    this.common.getData(api).pipe().subscribe({
+      next:(response)=>{
+        if(response.success){
+          this.customerDetails = response.data;
+          console.log(response.data);
+          this.profileForm.patchValue({
+            firstName: this.customerDetails.firstName,
+            lastName: this.customerDetails.lastName,
+            email: this.customerDetails.email,
+            contactNumber: this.customerDetails.contactNumber
+          });
+        }
+      },
+      error:(error)=>{
+        console.log(error);
+      },
+      complete:()=>{
+        this.spinner.hide();
+      }
+    })
   }
 }

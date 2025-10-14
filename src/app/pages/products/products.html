@@ -1,6 +1,6 @@
 <div class="container my-4">
     <div *ngIf="categoryId>0 && products.length > 0">
-        <h2 class="section-title text-center mb-5"> {{products[0]?.categoryName}} Products</h2>
+        <h2 class="section-title text-center mb-5"> {{products[0].categoryName}} Products</h2>
     </div>
     <div *ngIf="products.length === 0" class="no-products text-center py-5">
       <i class="fa-solid fa-box-open no-products-icon"></i>

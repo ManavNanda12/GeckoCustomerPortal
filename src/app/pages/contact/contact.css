@@ -1,0 +1,304 @@
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* === Main Container === */
+.contact-container {
+  position: relative;
+  /* background: radial-gradient(circle at top left, #0f0f0f, #000); */
+  min-height: 100vh;
+  color: #e0e0e0;
+  overflow: hidden;
+}
+
+/* === Floating Orbs === */
+.floating-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  animation: float 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.orb-1 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, #00ffff, transparent);
+  top: 10%;
+  left: 10%;
+}
+
+.orb-2 {
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, #00bcd4, transparent);
+  top: 50%;
+  right: 15%;
+  animation-delay: 2s;
+}
+
+.orb-3 {
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, #00ffff, transparent);
+  bottom: 15%;
+  left: 20%;
+  animation-delay: 4s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+  33% { transform: translate(30px, -30px) scale(1.1); opacity: 0.5; }
+  66% { transform: translate(-20px, 20px) scale(0.9); opacity: 0.3; }
+}
+
+/* === Header === */
+.header-section {
+  animation: slideInDown 0.8s ease;
+}
+
+.message-icon {
+  display: inline-block;
+  color: #00ffff;
+  animation: pulse 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.6));
+}
+
+.main-title {
+  font-size: 48px;
+  font-weight: 700;
+  color: #00ffff;
+  text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+  animation: glow 2s ease-in-out infinite;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #999;
+  line-height: 1.6;
+}
+
+@keyframes slideInDown {
+  from { opacity: 0; transform: translateY(-50px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+@keyframes glow {
+  0%, 100% { text-shadow: 0 0 20px rgba(0, 255, 255, 0.5); }
+  50% { text-shadow: 0 0 30px rgba(0, 255, 255, 0.8); }
+}
+
+/* === Info Cards === */
+.info-card {
+  background: rgba(20, 20, 20, 0.8);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 30px;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slideInUp 0.8s ease backwards;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.info-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.info-card:hover::before {
+  left: 100%;
+}
+
+.info-card:hover,
+.info-card.active {
+  transform: translateY(-10px) scale(1.03);
+  border-color: #00ffff;
+  box-shadow: 0 20px 50px rgba(0, 255, 255, 0.3);
+  background: rgba(0, 255, 255, 0.05);
+}
+
+.card-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(0, 188, 212, 0.2));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00ffff;
+  transition: all 0.3s ease;
+}
+
+.info-card:hover .card-icon {
+  transform: rotate(360deg) scale(1.1);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.5);
+}
+
+.card-title {
+  font-weight: 600;
+  color: #00ffff;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.card-content {
+  color: #ccc;
+  font-size: 15px;
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(50px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === Form Section === */
+.form-section {
+  animation: zoomIn 0.8s ease 0.3s backwards;
+}
+
+.form-container {
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid rgba(0, 255, 255, 0.15);
+  border-radius: 20px;
+  box-shadow: 0 0 40px rgba(0, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.header-line {
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #00ffff, transparent);
+  animation: expandWidth 1s ease;
+}
+
+@keyframes expandWidth {
+  from { width: 0; }
+  to { width: 80px; }
+}
+
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* === Form Styles === */
+.form-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #00ffff !important;
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
+  letter-spacing: 0.5px;
+}
+
+.form-input {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 2px solid rgba(0, 255, 255, 0.2) !important;
+  border-radius: 10px !important;
+  color: #fff !important;
+  padding: 14px 18px !important;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus {
+  border-color: #00ffff !important;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3) !important;
+  background: rgba(0, 255, 255, 0.05) !important;
+  transform: translateY(-2px);
+}
+
+.form-input::placeholder {
+  color: #666;
+}
+
+/* === Button === */
+.btn-send {
+  background: linear-gradient(90deg, #00ffff, #00bcd4);
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 1px;
+}
+
+.btn-send::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-send:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 255, 255, 0.5);
+}
+
+.btn-send:hover::before {
+  left: 100%;
+}
+
+.btn-send:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-send.submitted {
+  background: linear-gradient(90deg, #4caf50, #66bb6a);
+  animation: successPulse 0.6s ease;
+}
+
+@keyframes successPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.btn-send svg {
+  transition: transform 0.3s ease;
+}
+
+.btn-send:hover svg {
+  transform: rotate(45deg);
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+  .main-title {
+    font-size: 36px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+  }
+
+  .info-card {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-title {
+    font-size: 28px;
+  }
+}

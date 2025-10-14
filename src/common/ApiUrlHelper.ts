@@ -21,9 +21,11 @@ export class ApiUrlHelper {
     UpdateCartCustomerId:'cart/update-cart-customer-id'
   }
   Order = {
-   CheckOut:'order/checkout' 
+   CheckOut:'order/checkout' ,
+   GetOrderList:'order/get-order-list/{customerId}',
+   GetOrderDetails:'order/get-order-detail/{orderId}'
   }
   Customer = {
-    GetCustomerDetails:'customer/get-customer-by-id/{customerId}'
+    GetCustomerDetails:'get-customer-by-id/{customerId}'
   }
 }

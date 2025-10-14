@@ -207,38 +207,97 @@
   }
   
 
-  /* After order Placed */
-  .celebration-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.85);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 3000;
-    flex-direction: column;
-    overflow: hidden;
+  /* === Celebration Overlay === */
+.celebration-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, #050505 20%, #000 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+  overflow: hidden;
+  backdrop-filter: blur(4px);
+  animation: fadeInBg 1.5s ease forwards;
+}
+
+/* Fireworks Canvas */
+#fireworksCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* === Congrats Box === */
+.congrats-box {
+  position: relative;
+  z-index: 10;
+  color: #fff;
+  text-align: center;
+  padding: 40px 60px;
+  background: rgba(15, 15, 15, 0.7);
+  border-radius: 20px;
+  border: 2px solid rgba(0, 255, 255, 0.2);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.25),
+              inset 0 0 30px rgba(0, 255, 255, 0.1);
+  animation: floatUp 2s ease-out, glowPulse 3s ease-in-out infinite;
+}
+
+/* Neon Gradient Text */
+.congrats-box h2 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+  background: linear-gradient(90deg, #00ffff, #6c5ce7, #00bcd4, #ff6b6b);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientMove 3s ease infinite;
+  text-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+}
+
+/* Subtext */
+.congrats-box p {
+  font-size: 1.2rem;
+  color: #bdbdbd;
+  margin-top: 5px;
+  animation: fadeInText 2s ease forwards;
+}
+
+/* === Keyframes === */
+@keyframes fadeInBg {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(50px) scale(0.9); opacity: 0; }
+  60% { transform: translateY(-10px) scale(1.02); opacity: 1; }
+  100% { transform: translateY(0) scale(1); }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.2),
+                inset 0 0 20px rgba(0, 255, 255, 0.1);
   }
-  
-  #fireworksCanvas {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+  50% {
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.4),
+                inset 0 0 40px rgba(0, 255, 255, 0.2);
   }
-  
-  .congrats-box {
-    position: relative;
-    color: #fff;
-    text-align: center;
-    z-index: 10;
-    animation: pop-in 0.6s ease;
-  }
-  
-  .congrats-box h2 {
-    font-size: 2.5rem;
-    background: linear-gradient(90deg, #ff6b6b, #f9ca24, #00cec9, #6c5ce7);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeInText {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

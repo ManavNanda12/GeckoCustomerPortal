@@ -33,7 +33,7 @@ export class Cart implements OnInit, OnDestroy {
    }
 
   ngOnInit(): void {
-    this.customerId = Number(sessionStorage.getItem('customerId')) || 0;
+    this.customerId = Number(localStorage.getItem('CustomerId')) || 0;
     this.getCartDetails();
   }
 
@@ -104,6 +104,11 @@ export class Cart implements OnInit, OnDestroy {
   }
 
   checkout(){
+    if(this.customerId == 0 || this.customerId == null){
+      this.toastr.error("Please login to checkout");
+      this.router.navigate(['/login']);
+      return;
+    }
     this.spinner.show();
     let requestedModel ={
       cartSessionId: this.common.getSessionId(),
@@ -211,7 +216,6 @@ export class Cart implements OnInit, OnDestroy {
     }
     this.common.postData(this.api.Cart.UpdateCartCustomerId,requestedModel).pipe().subscribe({
       next: (res) => {
-        console.log(res)
         this.toastr.success("Cart updated successfully");
       },
       error: (err: any) => {

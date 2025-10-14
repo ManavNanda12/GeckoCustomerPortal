@@ -1,0 +1,62 @@
+<div class="order-container">
+    <div class="order-header">
+      <h2 class="order-title">
+        <i class="bi bi-bag-check-fill"></i>
+        My Orders
+      </h2>
+      <div class="header-line"></div>
+    </div>
+    
+    <div class="order-list">
+      <div *ngFor="let order of orderList" class="order-item" (click)="navigateToOrderDetail(order.id)">
+        <div class="order-card">
+          <!-- Order Status Badge -->
+          <div class="order-badge" [ngClass]="getStatusClass(order.orderStatus)">
+            <i class="bi" [ngClass]="getStatusIcon(order.orderStatus)"></i>
+            {{ getStatusClass(order.orderStatus) }}
+          </div>
+          
+          <!-- Order Content -->
+          <div class="order-content">
+            <div class="order-header-info">
+              <h3 class="order-id">Order #{{ order.id }}</h3>
+              <div class="order-date">
+                <i class="bi bi-calendar3"></i>
+                {{ order.orderDate | date:'mediumDate' }}
+              </div>
+            </div>
+            
+            <div class="order-details">
+              <div class="order-amount">
+                <span class="amount-label">Total Amount</span>
+                <span class="amount-value">${{ order.total | number:'1.2-2' }}</span>
+              </div>
+              <div class="order-items-count" *ngIf="order.itemCount">
+                <i class="fa-solid fa-box"></i>
+                {{ order.itemCount }} {{ order.itemCount === 1 ? 'item' : 'items' }}
+              </div>
+            </div>
+          </div>
+          
+          <!-- Navigate Arrow -->
+          <div class="order-arrow">
+            <i class="fa-solid fa-chevron-right"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Empty State -->
+    <div *ngIf="orderList?.length === 0" class="empty-orders">
+      <div class="empty-icon">
+        <i class="bi bi-bag-x"></i>
+      </div>
+      <h3>No Orders Found</h3>
+      <p>You haven't placed any orders yet. Start shopping to see your orders here!</p>
+      <button class="btn-start-shopping" (click)="navigateToProducts()">
+        <span>Start Shopping</span>
+        <i class="bi bi-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+  

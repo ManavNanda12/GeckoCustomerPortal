@@ -1,9 +1,15 @@
 <div class="splash-screen" [class.animate]="animate">
+  <video autoplay muted loop playsinline class="splash-bg">
+    <source src="/assets/videos/gym-bg.mp4" type="video/mp4" />
+  </video>
+
+  <div class="splash-overlay"></div>
+
   <div class="splash-content text-center">
-    <!-- Dummy Logo -->
     <div class="logo-wrapper">
-      <mat-icon>add_shopping_cart</mat-icon>
+      <mat-icon class="logo">fitness_center</mat-icon>
     </div>
-    <h1 class="app-title mt-3">My App</h1>
+    <h1 class="app-title mt-3">Beast Mode</h1>
+    <p class="app-subtitle">Push. Sweat. Repeat.</p>
   </div>
 </div>
