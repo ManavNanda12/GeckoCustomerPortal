@@ -7,6 +7,7 @@ import { ApiUrlHelper } from '../../../common/ApiUrlHelper';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Common } from '../../../services/common';
 import { Orders } from './orders/orders';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -40,8 +41,12 @@ export class Profile implements OnInit {
   customerDetails!:any;
 
   constructor(private readonly fb:FormBuilder , private readonly api:ApiUrlHelper,
-              private readonly spinner:NgxSpinnerService , private readonly common:Common){
-    
+              private readonly spinner:NgxSpinnerService , private readonly common:Common,
+              private readonly activatedRoute:ActivatedRoute  
+            ){
+    this.activatedRoute.url.subscribe((params) => {
+      this.activeTab = params[1]?.path || 'home';
+    });
   }
 
   ngOnInit(): void {
@@ -95,7 +100,6 @@ export class Profile implements OnInit {
       next:(response)=>{
         if(response.success){
           this.customerDetails = response.data;
-          console.log(response.data);
           this.profileForm.patchValue({
             firstName: this.customerDetails.firstName,
             lastName: this.customerDetails.lastName,

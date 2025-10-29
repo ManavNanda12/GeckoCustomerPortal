@@ -133,7 +133,8 @@ export class Cart implements OnInit, OnDestroy {
             this.showCelebration = false;
             this.getCartDetails();
             cancelAnimationFrame(this.animationFrame);
-          }, 10000);
+            this.router.navigate(['/profile/orders']);
+          }, 5000);
         }
         else{
           this.toastr.error(res.message);

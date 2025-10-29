@@ -27,7 +27,8 @@ export const routes: Routes = [
             { path: 'products/:categoryId', component: Products },
             { path:'contact',component:Contact},
             { path:'cart',component:Cart},
-            { path:'profile',component:Profile , canActivate: [AuthGuard] }
+            { path:'profile',component:Profile , canActivate: [AuthGuard] },
+            {path:'profile/orders',component:Profile , canActivate: [AuthGuard] }
         ]
     },
     { path: '**', redirectTo: 'home' }
