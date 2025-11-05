@@ -1,0 +1,133 @@
+/* Full-screen overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(5, 5, 10, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* Box styling */
+.product-detail-box {
+  background: linear-gradient(145deg, #121214, #1c1c1f);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #fff;
+  width: 70%;
+  height: 70%;
+  max-width: 95%;
+  box-shadow: 0 0 40px rgba(0, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  transform: perspective(1200px)
+    rotateX(var(--tiltX))
+    rotateY(var(--tiltY))
+    scale(0.98);
+  transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
+  animation: zoomIn 0.5s ease forwards;
+
+  &:hover {
+    transform: perspective(1200px)
+      rotateX(var(--tiltX))
+      rotateY(var(--tiltY))
+      scale(1.01);
+    box-shadow: 0 0 60px rgba(0, 255, 255, 0.25);
+  }
+}
+
+/* Close button */
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #00e0ff;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  z-index: 10;
+
+  &:hover {
+    background: rgba(0, 224, 255, 0.3);
+    transform: rotate(90deg);
+  }
+}
+
+/* Carousel */
+.carousel-container {
+  width: 45%;
+}
+
+.main-image {
+  height: 400px;
+  object-fit: cover;
+  border-radius: 15px;
+  transition: transform 0.5s ease-in-out;
+  box-shadow: 0 0 20px rgba(0, 224, 255, 0.2);
+
+  &:hover {
+    transform: scale(1.03);
+  }
+}
+
+/* Thumbnails */
+.thumb-container img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  transition: all 0.3s ease-in-out;
+  filter: brightness(0.8);
+
+  &.active {
+    border-color: #00e0ff;
+    box-shadow: 0 0 10px #00e0ff;
+    filter: brightness(1);
+  }
+
+  &:hover {
+    transform: scale(1.1);
+    filter: brightness(1);
+  }
+}
+
+/* Product Info */
+.text-gradient {
+  background: linear-gradient(90deg, #00e0ff, #008cff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.price {
+  font-size: 1.4rem;
+  color: #00e0ff;
+  font-weight: 600;
+}
+
+.description {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #bbb;
+}
+
+.neon-btn {
+  background: linear-gradient(90deg, #007bff, #00e0ff);
+  color: #fff !important;
+  border: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 224, 255, 0.5);
+
+  &:hover {
+    box-shadow: 0 0 20px rgba(0, 224, 255, 0.8);
+    transform: translateY(-2px);
+  }
+
+  mat-icon {
+    margin-right: 6px;
+  }
+}

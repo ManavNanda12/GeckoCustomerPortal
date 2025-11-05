@@ -1,0 +1,87 @@
+<div class="overlay animate__animated animate__fadeIn">
+  <div
+    class="product-detail-box dark-mode rounded-4 p-4 d-flex flex-column flex-md-row align-items-start position-relative animate__animated animate__zoomIn"
+    (mousemove)="onMouseMove($event)"
+    (mouseleave)="resetTilt()"
+  >
+    <!-- Close Icon -->
+    <button class="close-btn" mat-icon-button (click)="closeDialog()">
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <!-- Left: Image Carousel -->
+    <div class="carousel-container me-md-4 position-relative">
+      <div
+        id="productCarousel"
+        class="carousel slide"
+        data-bs-ride="carousel"
+        (slid.bs.carousel)="onCarouselSlide($event)"
+      >
+        <div class="carousel-inner rounded-3 overflow-hidden">
+          <div
+            class="carousel-item"
+            *ngFor="let img of imagePreviews; let i = index"
+            [class.active]="i === activeIndex"
+          >
+            <img
+              [src]="img.projectUrl"
+              class="d-block w-100 main-image"
+              alt="Product Image"
+            />
+          </div>
+        </div>
+
+        <!-- Carousel controls -->
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#productCarousel"
+          data-bs-slide="prev"
+        >
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#productCarousel"
+          data-bs-slide="next"
+        >
+          <span class="carousel-control-next-icon"></span>
+        </button>
+      </div>
+
+      <!-- Thumbnails -->
+      <div class="thumb-container mt-3 d-flex justify-content-center flex-wrap gap-2">
+        <img
+          *ngFor="let img of imagePreviews; let i = index"
+          [src]="img.projectUrl"
+          class="thumb-img rounded"
+          [class.active]="i === activeIndex"
+          (click)="selectImage(i)"
+        />
+      </div>
+    </div>
+
+    <!-- Right: Product Details -->
+    <div class="product-info flex-grow-1 text-light text-center text-md-start mt-4 mt-md-0">
+      <h3 class="fw-bold text-gradient mb-2">
+        {{ product.productName }}
+      </h3>
+      <p class="text-secondary mb-1">{{ product.categoryName }}</p>
+      <h4 class="price mt-3 mb-3">
+        {{ product.price | currency: 'USD' }}
+      </h4>
+
+      <mat-divider class="my-3"></mat-divider>
+
+      <p class="description mb-4">
+        {{ product.productDescription }}
+      </p>
+
+      <button class="neon-btn mt-2 btn btn-primary">
+        <mat-icon>shopping_cart</mat-icon>
+        Add to Cart
+      </button>
+    </div>
+  </div>
+</div>

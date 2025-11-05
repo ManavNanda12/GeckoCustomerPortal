@@ -8,6 +8,8 @@ import { Common } from '../../../services/common';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { ProductDetail } from './product-detail/product-detail';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-products',
@@ -28,7 +30,8 @@ export class Products {
     private readonly spinner: NgxSpinnerService,
     private readonly toastr: ToastrService,
     private readonly activatedRoute:ActivatedRoute,
-    private readonly router:Router
+    private readonly router:Router,
+    private readonly dialog: MatDialog
   ) {
     this.activatedRoute.params.subscribe(params => {
       this.categoryId = params['categoryId'];
@@ -128,6 +131,13 @@ flyToCart(event: MouseEvent,count:number) {
     rocket.remove();
     this.common.triggerCartAnimation(); 
     this.common.setCartProductCount(count);
+  });
+}
+
+openProductDetail(product :ProductResponse){
+  this.dialog.open(ProductDetail, {
+    data: { product: product },
+    maxWidth:'1000px'
   });
 }
 

@@ -12,7 +12,8 @@ export class ApiUrlHelper {
     GetCategories: "category/get-category-list"
   };
   Product = {
-    GetProducts: "product/get-product-list/:categoryId"
+    GetProducts: "product/get-product-list/:categoryId",
+    GetProductImage: "product/get-product-images/{Id}", 
   }
   Cart = {
     AddToCart: "cart/add-to-cart",
