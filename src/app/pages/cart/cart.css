@@ -21,6 +21,34 @@
     flex-direction: column;
     height: 100%;
   }
+
+  .out-of-stock-bg {
+    border: 2px solid #ff4d4f !important;
+    box-shadow: 0 0 10px 2px #ff4d4f44 !important;
+    animation: shakeOutStock 0.7s cubic-bezier(.36,.07,.19,.97) both;
+  }
+
+@keyframes shakeOutStock {
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(4px); }
+  30%, 50%, 70% { transform: translateX(-8px); }
+  40%, 60% { transform: translateX(8px); }
+  100% { transform: translateX(0); }
+}
+
+  .out-of-stock-msg {
+    margin-top: 10px;
+    background: #000000;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.98rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 8px #ff4d4f33;
+  }
   
   .cart-card:hover {
     transform: translateY(-5px);

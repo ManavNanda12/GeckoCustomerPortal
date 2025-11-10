@@ -39,7 +39,6 @@ export class Orders implements OnInit {
             }, {})
           );
           this.orderList = result;
-          console.log(this.orderList);
         }
       },
       error:(error)=>{

@@ -21,6 +21,7 @@ export class Cart implements OnInit, OnDestroy {
   private animationFrame: any;
   customerId: number =0;
   cartId: number =0;
+  outOfStockItems: any[] = [];
 
   constructor(
     private readonly common: Common,
@@ -47,6 +48,20 @@ export class Cart implements OnInit, OnDestroy {
       next: (res) => {
         this.cartId = res.data[0]?.cartId;
         this.cartItems = res.data;
+        // Mark out-of-stock items for UI
+        this.cartItems.forEach(item => {
+          if (
+            item.isQuantityAvailable === false ||
+            item.stockStatus === 'INSUFFICIENT_STOCK' ||
+            (item.maxAvailableQuantity !== undefined && item.quantity > item.maxAvailableQuantity)
+          ) {
+            item.outOfStock = true;
+            item.availableQty = item.maxAvailableQuantity || item.availableQuantity || item.stockQuantity || 0;
+          } else {
+            item.outOfStock = false;
+            item.availableQty = null;
+          }
+        });
         this.common.setCartProductCount(this.cartItems.length);
         if(this.cartItems[0]?.cartId > 0 && this.customerId > 0 && this.cartItems.length > 0 && this.cartItems[0]?.customerId == 0){
           this.updateCartCustomerId();
@@ -109,6 +124,10 @@ export class Cart implements OnInit, OnDestroy {
       this.router.navigate(['/login']);
       return;
     }
+    if(this.outOfStockItems.length > 0){
+      this.toastr.error("Some items are out of stock");
+      return;
+    }
     this.spinner.show();
     let requestedModel ={
       cartSessionId: this.common.getSessionId(),
@@ -121,6 +140,7 @@ export class Cart implements OnInit, OnDestroy {
     }
     this.common.postData(this.api.Order.CheckOut,requestedModel).pipe().subscribe({
       next: (res) => {
+        console.log(res);
         if(res.success){
           this.showCelebration = true;
           setTimeout(() => {
@@ -128,7 +148,7 @@ export class Cart implements OnInit, OnDestroy {
               this.startFireworks();
             });
           }, 1000);
-        
+
           setTimeout(() => {
             this.showCelebration = false;
             this.getCartDetails();
@@ -136,7 +156,22 @@ export class Cart implements OnInit, OnDestroy {
             this.router.navigate(['/profile/orders']);
           }, 5000);
         }
-        else{
+        else {
+          // Out of stock handling
+          if (res.data && res.data.outOfStockItems && res.data.outOfStockItems.length > 0) {
+            this.outOfStockItems = res.data.outOfStockItems;
+            // Mark cartItems with outOfStock flag
+            this.cartItems.forEach(item => {
+              const out = this.outOfStockItems.find((o: any) => o.productId === item.productId);
+              if (out) {
+                item.outOfStock = true;
+                item.availableQty = out.availableQty;
+              } else {
+                item.outOfStock = false;
+                item.availableQty = null;
+              }
+            });
+          }
           this.toastr.error(res.message);
         }
       },
@@ -224,6 +259,12 @@ export class Cart implements OnInit, OnDestroy {
       },
       complete: () => { this.spinner.hide(); }
     })
+  }
+
+  getIsOutOfStock(){
+    return this.cartItems.some(item => item.isQuantityAvailable === false ||
+    item.stockStatus === 'INSUFFICIENT_STOCK' ||
+    (item.maxAvailableQuantity !== undefined && item.quantity > item.maxAvailableQuantity));
   }
 
 

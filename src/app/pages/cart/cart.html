@@ -17,7 +17,7 @@
         class="col-md-6 col-lg-4"
         *ngFor="let item of cartItems; let i = index"
       >
-        <div class="cart-card animate-scale">
+        <div class="cart-card animate-scale" [ngClass]="{'out-of-stock-bg': item.outOfStock}">
           <!-- Product Image -->
           <div class="cart-image">
             <img
@@ -45,6 +45,9 @@
             <p class="cart-item-total">
               Total: <strong>$ {{ item.itemTotal | number : '1.2-2' }}</strong>
             </p>
+            <div *ngIf="item.outOfStock" class="out-of-stock-msg">
+              <span>❗ <b>Out of stock!</b> Only {{ item.availableQty }} available.</span>
+            </div>
           </div>
         </div>
       </div>
@@ -56,7 +59,7 @@
         Grand Total:
         <span class="text-highlight">$ {{ getCartTotal() | number : '1.2-2' }}</span>
       </h4>
-      <button class="btn btn-animated-info mt-3" (click)="checkout()">Proceed to Checkout</button>
+      <button class="btn btn-animated-info mt-3" (click)="checkout()" [disabled]="getIsOutOfStock()">Proceed to Checkout</button>
     </div>
   </div>
   

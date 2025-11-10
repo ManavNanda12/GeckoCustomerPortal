@@ -11,7 +11,7 @@
       
     <div *ngIf="products.length > 0" class="row g-4">
       <div class="col-lg-4 col-md-4 col-sm-6" *ngFor="let product of products; let i = index">
-        <div class="product-card"  [style.animation-delay]="i * 150 + 'ms'" (click)="openProductDetail(product)">
+        <div class="product-card"  [style.animation-delay]="i * 150 + 'ms'" >
           <!-- Wishlist Heart -->
           <div class="wishlist" (click)="toggleWishlist(product)">
             <!-- <i class="fa-regular fa-heart" *ngIf="!product.isWishlisted"></i>
@@ -25,6 +25,7 @@
               [src]="product.productImage"
               alt="{{product.productName}}"
               (error)="handleImageError(product)"
+              (click)="openProductDetail(product)"
             />
             <div class="product-overlay">
               <p>{{ product.productDescription }}</p>

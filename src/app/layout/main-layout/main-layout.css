@@ -6,6 +6,38 @@
 }
 
 /* ...existing code... */
+
+@media (max-width: 600px) {
+  .main-layout {
+    min-height: 100vh;
+  }
+  .main-content {
+    padding-top: 56px; /* adjust if header height is different */
+    min-height: calc(100vh - 56px - 80px); /* 80px is footer height, adjust if needed */
+  }
+  app-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+  }
+  app-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+  }
+  .content-overlay {
+    padding-bottom: 90px; /* space for footer */
+  }
+  .bg-video {
+    top: 56px;
+    height: calc(100% - 56px - 80px);
+  }
+}
+
 .main-content {
   position: relative;
   flex: 1;
