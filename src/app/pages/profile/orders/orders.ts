@@ -3,6 +3,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ApiUrlHelper } from '../../../../common/ApiUrlHelper';
 import { Common } from '../../../../services/common';
 import { CommonModule } from '@angular/common';
+import { OrderDetail } from './order-detail/order-detail';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-orders',
@@ -17,7 +20,9 @@ export class Orders implements OnInit {
 
   constructor(private readonly api:ApiUrlHelper,
     private readonly spinner:NgxSpinnerService,
-    private readonly common:Common){}
+    private readonly common:Common,
+    private readonly dialog: MatDialog,
+    private readonly router: Router){}
 
   ngOnInit(): void {
     this.getOrders();
@@ -79,12 +84,16 @@ export class Orders implements OnInit {
   
   
   navigateToOrderDetail(orderId: number): void {
-    // Add your navigation logic here
-    console.log('Navigate to order detail:', orderId);
+     this.dialog.open(OrderDetail, {
+        data: { orderId: orderId },
+        maxWidth:'800px',
+        width:'800px',
+        disableClose:true
+        
+      });
   }
   
   navigateToProducts(): void {
-    // Add your navigation logic here
-    console.log('Navigate to products page');
+    this.router.navigate(['/products']);
   }
 }

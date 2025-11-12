@@ -1,0 +1,54 @@
+<div class="order-detail-container">
+    <div class="mb-2 row">
+        <div>
+            <h2 class="title">Order Details</h2>
+        </div>
+        <!-- <div>
+            <button class="close-btn" (click)="dialogRef.close()">Close</button>
+        </div> -->
+        <hr>
+    </div>
+
+  <div *ngIf="!orderDetails" class="loading">
+    <p>Loading order details...</p>
+  </div>
+
+  <div *ngIf="orderDetails" class="order-detail-content">
+    <div class="product-list">
+      <div
+        class="product-card"
+        *ngFor="let item of orderDetails"
+      >
+        <div class="image-wrapper">
+          <img
+            [src]="item.imageUrl"
+            [alt]="item.productName"
+            (error)="handleImageError(item)"
+          />
+        </div>
+
+        <div class="product-info">
+          <h4>{{ item.productName }}</h4>
+          <div class="hover-description">
+            <p>{{ item.productDescription }}</p>
+          </div>
+          <p class="price">₹{{ item.unitPrice | number: '1.2-2' }}</p>
+          <p class="qty">Qty: {{ item.quantity }}</p>
+          <p class="subtotal">Subtotal: ₹{{ item.lineTotal | number: '1.2-2' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="order-summary">
+      <p><strong>Payment Method:</strong> {{ orderDetails[0].paymentMethod }}</p>
+      <p><strong>Tax:</strong> ₹{{ orderDetails[0].taxAmount | number:'1.2-2' }}</p>
+      <p><strong>Shipping:</strong> ₹{{ orderDetails[0].shippingAmount | number:'1.2-2' }}</p>
+      <p><strong>Discount:</strong> ₹{{ orderDetails[0].discountAmount | number:'1.2-2' }}</p>
+      <p class="total"><strong>Total:</strong> ₹{{ orderDetails[0].total | number:'1.2-2' }}</p>
+    </div>
+
+    <div class="footer">
+      <button class="close-btn" (click)="dialogRef.close()">Close</button>
+    </div>
+  </div>
+</div>

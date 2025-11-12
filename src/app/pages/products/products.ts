@@ -153,7 +153,8 @@ flyToCart(event: MouseEvent,count:number) {
 openProductDetail(product :ProductResponse){
   this.dialog.open(ProductDetail, {
     data: { product: product },
-    maxWidth:'1000px'
+    maxWidth:'1000px',
+    disableClose:true
   });
 }
 

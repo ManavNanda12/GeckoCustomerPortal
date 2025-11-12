@@ -34,4 +34,7 @@ export class ApiUrlHelper {
     RemoveWishlistItem:'wishlist/remove-wishlist-item',
     GetWishList:'wishlist/get-customer-wishlist'
   }
+  ContactUs = {
+    ContactUs:'contactus/save-contactus-request'
+  }
 }

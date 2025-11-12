@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
+import { ApiUrlHelper } from '../../../common/ApiUrlHelper';
+import { Common } from '../../../services/common';
 
 @Component({
   selector: 'app-contact',
@@ -41,7 +45,11 @@ export class Contact {
     }
   ];
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder,
+    private readonly api: ApiUrlHelper,
+    private readonly common: Common,
+    private readonly spinner: NgxSpinnerService,
+    private readonly toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.initializeForm();
@@ -58,14 +66,27 @@ export class Contact {
 
   onSubmit(): void {
     if (this.contactForm.valid) {
-      console.log('Form submitted:', this.contactForm.value);
-      this.isFormSubmitted = true;
-      
-      // Reset form after 3 seconds
-      setTimeout(() => {
-        this.contactForm.reset();
-        this.isFormSubmitted = false;
-      }, 3000);
+      let api = this.api.ContactUs.ContactUs;
+      let requestedModel = {
+        customerName: this.contactForm.value.name,
+        customerEmail: this.contactForm.value.email,
+        contactSubject: this.contactForm.value.subject,
+        customerMessage: this.contactForm.value.message
+      }
+      this.common.postData(api,requestedModel).pipe().subscribe({
+        next:(response)=>{
+          if(response.success){
+            this.toastr.success(response.message);
+            this.contactForm.reset();
+          }
+        },
+        error:(error)=>{
+          console.log(error);
+        },
+        complete:()=>{
+          this.spinner.hide();
+        }
+      })
     }
   }
 
