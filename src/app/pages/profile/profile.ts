@@ -8,6 +8,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Common } from '../../../services/common';
 import { Orders } from './orders/orders';
 import { ActivatedRoute } from '@angular/router';
+import { Wishlist } from './wishlist/wishlist';
 
 @Component({
   selector: 'app-profile',
@@ -16,7 +17,8 @@ import { ActivatedRoute } from '@angular/router';
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    Orders  
+    Orders  ,
+    Wishlist
     ],
   templateUrl: './profile.html',
   styleUrl: './profile.css'

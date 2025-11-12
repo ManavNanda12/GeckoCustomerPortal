@@ -15,6 +15,7 @@ export interface ProductResponse{
     categoryName: string;
     totalRecords: number;
     sku:string;
+    isWishlistItem:boolean;
 }
 
 export const gymImages: string[] = [

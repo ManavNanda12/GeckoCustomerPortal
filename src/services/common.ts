@@ -26,7 +26,7 @@ export class Common {
   ) {}
 
   private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('jwtToken');
+    const token = localStorage.getItem('JwtToken');
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
@@ -114,7 +114,7 @@ export class Common {
   }
 
   postFormData(url: string, formData: FormData): Observable<responseModel> {
-    const token = localStorage.getItem('jwtToken');
+    const token = localStorage.getItem('JwtToken');
 
     let headers = new HttpHeaders({
       'Access-Control-Allow-Origin': '*',

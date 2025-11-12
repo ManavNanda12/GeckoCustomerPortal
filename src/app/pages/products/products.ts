@@ -55,7 +55,23 @@ export class Products {
   }
 
   toggleWishlist(product: any) {
-    product.isWishlisted = !product.isWishlisted;
+    let api = this.api.Wishlist.SaveWishlist;
+    let data = {
+      ProductId: product.productID,
+      CustomerId: this.customerId
+    }
+    this.common.postData(api, data).pipe().subscribe({
+      next: (res) => {
+        if(res.success){
+          this.toastr.success(res.message);
+          product.isWishlistItem = !product.isWishlistItem;
+        }
+      },
+      error: (err: any) => {
+        this.toastr.error("Failed to add product to wishlist", "Error");
+      },
+      complete: () => { this.spinner.hide(); }
+    })
   }
 
   handleImageError(product: ProductResponse) {
@@ -139,6 +155,26 @@ openProductDetail(product :ProductResponse){
     data: { product: product },
     maxWidth:'1000px'
   });
+}
+
+removeFromWishlist(product:ProductResponse){
+  let api = this.api.Wishlist.RemoveWishlistItem;
+  let data = {
+    ProductId: product.productID,
+    CustomerId: this.customerId
+  }
+  this.common.postData(api,data).pipe().subscribe({
+    next: (res) => {
+      if(res.success){
+        this.toastr.success(res.message);
+        product.isWishlistItem = false;
+      }
+    },
+    error: (err: any) => {
+      this.toastr.error("Failed to remove product from wishlist", "Error");
+    },
+    complete: () => { this.spinner.hide(); }
+  })
 }
 
 

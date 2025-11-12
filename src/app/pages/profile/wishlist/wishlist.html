@@ -1,0 +1,41 @@
+<div class="container-fluid product-list-wrapper">
+  <div class="row g-4">
+    <div
+      class="col-xl-3 col-lg-4 col-md-6 col-sm-12"
+      *ngFor="let product of wishList"
+    >
+      <div class="product-card shadow-sm border-0">
+        <div class="image-container position-relative">
+          <img
+            [src]="product.productImage"
+            [alt]="product.productName"
+            class="product-image"
+            (error)="handleImageError(product)"
+          />
+          <button
+            class="wishlist-btn"
+            [ngClass]="{'active': product.isWishlistItem}"
+            title="Add to Wishlist"
+          >
+            <mat-icon (click)="removeFromWishlist(product)">favorite</mat-icon>
+          </button>
+        </div>
+
+        <div class="card-body p-3">
+          <h5 class="product-name mb-1">{{ product.productName }}</h5>
+          <p class="category-name text-muted mb-2">{{ product.categoryName }}</p>
+          <p class="product-description mb-2">
+            {{ product.productDescription }}
+          </p>
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="price mb-0">${{ product.price }}</h5>
+            <button class="btn btn-primary btn-sm"  (click)="openProductDetail(product)">View Details</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="wishList.length === 0">
+      <p class="text-center">No products in wishlist</p>
+    </div>
+  </div>
+</div>

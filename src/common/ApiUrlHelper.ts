@@ -29,4 +29,9 @@ export class ApiUrlHelper {
   Customer = {
     GetCustomerDetails:'get-customer-by-id/{customerId}'
   }
+  Wishlist = {
+    SaveWishlist:'wishlist/save-wishlist-item',
+    RemoveWishlistItem:'wishlist/remove-wishlist-item',
+    GetWishList:'wishlist/get-customer-wishlist'
+  }
 }

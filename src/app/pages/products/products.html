@@ -13,10 +13,9 @@
       <div class="col-lg-4 col-md-4 col-sm-6" *ngFor="let product of products; let i = index">
         <div class="product-card"  [style.animation-delay]="i * 150 + 'ms'" >
           <!-- Wishlist Heart -->
-          <div class="wishlist" (click)="toggleWishlist(product)">
-            <!-- <i class="fa-regular fa-heart" *ngIf="!product.isWishlisted"></i>
-            <i class="fa-solid fa-heart text-danger" *ngIf="product.isWishlisted"></i> -->
-            <i class="fa-regular fa-heart"></i>
+          <div class="wishlist">
+            <i class="fa-regular fa-heart" *ngIf="!product.isWishlistItem" (click)="toggleWishlist(product)"></i>
+            <i class="fa-solid fa-heart text-danger" *ngIf="product.isWishlistItem" (click)="removeFromWishlist(product)"></i>
           </div>
   
           <!-- Product Image with Description Overlay -->

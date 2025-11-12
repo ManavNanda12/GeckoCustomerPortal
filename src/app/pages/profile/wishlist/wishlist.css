@@ -1,0 +1,126 @@
+/* 🌙 Dark Theme Base */
+.product-list-wrapper {
+  background-color: #121212;
+  padding: 20px;
+  color: #f1f1f1;
+  border-radius: 12px;
+}
+
+/* 🧱 Product Card */
+.product-card {
+  background: #1e1e1e;
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0px 8px 25px rgba(255, 255, 255, 0.08);
+}
+
+/* 🖼️ Image Section */
+.image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.product-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.1);
+}
+
+/* ❤️ Wishlist */
+.wishlist-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  padding: 8px;
+  color: #bbb;
+  transition: all 0.3s ease;
+}
+
+.wishlist-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ff6b81;
+}
+
+.wishlist-btn.active {
+  color: #ff3b5f;
+}
+
+/* 🧾 Content */
+.card-body {
+  padding: 16px;
+  position: relative;
+  flex-grow: 1;
+}
+
+.product-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.category-name {
+  font-size: 0.9rem;
+  color: #9e9e9e;
+}
+
+/* ✨ Hidden Description with Animation */
+.product-description {
+  font-size: 0.85rem;
+  color: #bdbdbd;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+.product-card:hover .product-description {
+  height: 60px;
+  opacity: 1;
+  margin-top: 10px;
+}
+
+/* 💲 Price Section */
+.price {
+  color: #00c853;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.price-section {
+  border-top: 1px solid #2a2a2a;
+  padding-top: 10px;
+}
+
+/* 🔘 Button */
+.btn-primary {
+  background: linear-gradient(90deg, #007bff, #0056b3);
+  border: none;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(90deg, #0056b3, #007bff);
+  transform: scale(1.05);
+}
