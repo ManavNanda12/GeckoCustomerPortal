@@ -66,6 +66,7 @@ export class Contact {
 
   onSubmit(): void {
     if (this.contactForm.valid) {
+      this.spinner.show();
       let api = this.api.ContactUs.ContactUs;
       let requestedModel = {
         customerName: this.contactForm.value.name,
