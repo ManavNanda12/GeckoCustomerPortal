@@ -6,10 +6,11 @@ import { Common } from '../../../services/common';
 import { ApiUrlHelper } from '../../../common/ApiUrlHelper';
 import { CommonModule } from '@angular/common';
 import { gymImages } from '../../../common/models/CommonInterfaces';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-cart',
-  imports: [CommonModule,RouterModule],
+  imports: [CommonModule,RouterModule,FormsModule],
   templateUrl: './cart.html',
   styleUrl: './cart.css'
 })
@@ -22,6 +23,9 @@ export class Cart implements OnInit, OnDestroy {
   customerId: number =0;
   cartId: number =0;
   outOfStockItems: any[] = [];
+  couponCode: string = "";
+  couponResponse: any;
+  couponDiscount: number = 0; 
 
   constructor(
     private readonly common: Common,
@@ -266,6 +270,35 @@ export class Cart implements OnInit, OnDestroy {
     item.stockStatus === 'INSUFFICIENT_STOCK' ||
     (item.maxAvailableQuantity !== undefined && item.quantity > item.maxAvailableQuantity));
   }
+
+  applyCoupon() {
+  if (!this.couponCode) return;
+  this.spinner.show();
+  let api = this.api.Coupon.ApplyCoupon.replace("{couponCode}", this.couponCode);
+  this.common.getData(api).pipe().subscribe({
+    next: (res) => {
+      this.couponResponse = res;
+      if(res.success){
+        this.toastr.success(res.message);
+      }
+       const cartTotal = this.getCartTotal();
+
+        if (res.data.discountType === "Percentage") {
+          this.couponDiscount = (cartTotal * res.data.discountValue) / 100;
+        } else if (res.data.discountType === "Flat") {
+          this.couponDiscount = res.data.discountValue;
+        }
+    },
+    error: (err: any) => {
+      this.toastr.error("Failed to apply coupon", "Error");
+    },
+    complete: () => { this.spinner.hide(); }
+  })
+}
+
+getFinalTotal() {
+  return this.getCartTotal() - this.couponDiscount;
+}
 
 
 }

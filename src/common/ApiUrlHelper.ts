@@ -37,4 +37,10 @@ export class ApiUrlHelper {
   ContactUs = {
     ContactUs:'contactus/save-contactus-request'
   }
+  Coupon = {
+    ApplyCoupon:'order/apply-coupon/{couponCode}'
+  }
+  SitePolicy = {
+    GetPolicy:'site-policy/get-site-policies'
+  }
 }

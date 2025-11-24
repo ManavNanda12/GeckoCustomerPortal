@@ -7,30 +7,35 @@ import { Contact } from './pages/contact/contact';
 import { Cart } from './pages/cart/cart';
 import { Profile } from './pages/profile/profile';
 import { AuthGuard } from './guard/auth.guard';
+import { PrivacyPolicy } from './pages/privacy-policy/privacy-policy';
+import { TermsAndConditions } from './pages/terms-and-conditions/terms-and-conditions';
 
 export const routes: Routes = [
-    {
-        path: '',
-        loadComponent: () => import('./pages/splash-screen/splash-screen').then(s => s.SplashScreen)
-    },
-    {
-        path: 'login',
-        loadComponent: () => import('./pages/auth/login/login').then(s => s.Login)
-    },
-    {
-        path: '',
-        component: MainLayout,
-        children: [
-            { path: 'home', component: Home },
-            { path: 'category', component: Category },
-            { path: 'products', component: Products },
-            { path: 'products/:categoryId', component: Products },
-            { path:'contact',component:Contact},
-            { path:'cart',component:Cart},
-            { path:'profile',component:Profile , canActivate: [AuthGuard] },
-            {path:'profile/orders',component:Profile , canActivate: [AuthGuard] }
-        ]
-    },
-    { path: '**', redirectTo: 'home' }
-
+  {
+    path: '',
+    loadComponent: () =>
+      import('./pages/splash-screen/splash-screen').then((s) => s.SplashScreen),
+  },
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./pages/auth/login/login').then((s) => s.Login),
+  },
+  {
+    path: '',
+    component: MainLayout,
+    children: [
+      { path: 'home', component: Home },
+      { path: 'category', component: Category },
+      { path: 'products', component: Products },
+      { path: 'products/:categoryId', component: Products },
+      { path: 'contact', component: Contact },
+      { path: 'cart', component: Cart },
+      { path: 'profile', component: Profile, canActivate: [AuthGuard] },
+      { path: 'profile/orders', component: Profile, canActivate: [AuthGuard] },
+      { path: 'privacy-policy', component: PrivacyPolicy },
+      { path: 'terms-and-conditions', component: TermsAndConditions },
+    ],
+  },
+  { path: '**', redirectTo: 'home' },
 ];

@@ -55,10 +55,55 @@
   
     <!-- Cart Summary -->
     <div class="cart-summary animate-scale" *ngIf="cartItems.length > 0">
+      <div class="coupon-box mb-3 position-relative">
+
+    <label class="form-label coupon-label">Have a Coupon?</label>
+
+    <div class="input-group coupon-input-group">
+      <input
+        type="text"
+        class="form-control coupon-input"
+        placeholder="Enter coupon code"
+        [(ngModel)]="couponCode"
+      />
+
+      <button
+        class="btn btn-animated-info apply-btn"
+        (click)="applyCoupon()"
+      >
+        Apply
+      </button>
+    </div>
+
+    <!-- Success Animation -->
+    <div
+      class="coupon-success animate-coupon-success"
+      *ngIf="couponResponse?.success"
+    >
+      🎉 Coupon Applied Successfully!
+    </div>
+
+    <!-- Error Box -->
+    <div *ngIf="couponResponse && couponResponse.success === false" class="coupon-error animate-coupon-error">
+     ! {{ couponResponse?.message }}
+    </div>
+
+  </div>
+
       <h4>
         Grand Total:
-        <span class="text-highlight">$ {{ getCartTotal() | number : '1.2-2' }}</span>
+        <span class="text-highlight">
+          $ {{ getFinalTotal() | number : '1.2-2' }}
+        </span>
       </h4>
+
+      <!-- Show discount if applied -->
+      <div *ngIf="couponDiscount > 0" class="coupon-discount mt-2">
+        <span class="text-success">
+          - Discount Applied: ${{ couponDiscount | number : '1.2-2' }}
+        </span>
+      </div>
+
       <button class="btn btn-animated-info mt-3" (click)="checkout()" [disabled]="getIsOutOfStock()">Proceed to Checkout</button>
     </div>
   </div>
