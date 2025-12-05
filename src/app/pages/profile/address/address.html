@@ -1,0 +1,42 @@
+<div class="container-fluid address-wrapper">
+  <div class="row g-4">
+    <div 
+      class="col-xl-3 col-lg-4 col-md-6 col-sm-12"
+      *ngFor="let address of addressList"
+    >
+      <div 
+        class="address-card shadow-sm border-0"
+        [ngClass]="{'default-address': address.isDefault}"
+      >
+        <div class="card-body p-3">
+          <h5 class="address-title mb-1">
+            {{ address.addressName }}
+          </h5>
+
+          <p class="full-address text-muted mb-2">
+            {{ address.fullAddress }}
+          </p>
+
+          <p class="address-info mb-2">
+            {{ address.cityName }}, {{ address.stateName }}, {{ address.countryName }}
+          </p>
+
+          <div class="d-flex justify-content-between align-items-center mt-auto">
+            <button class="btn btn-primary btn-sm">Edit</button>
+
+            <span 
+              class="badge bg-success" 
+              *ngIf="address.isDefault"
+            >
+              Default
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="addressList.length === 0">
+      <p class="text-center">No saved addresses</p>
+    </div>
+  </div>
+</div>

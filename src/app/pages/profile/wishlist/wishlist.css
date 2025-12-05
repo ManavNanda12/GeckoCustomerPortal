@@ -81,7 +81,7 @@
 
 .category-name {
   font-size: 0.9rem;
-  color: #9e9e9e;
+  color: #9e9e9e !important;
 }
 
 /* ✨ Hidden Description with Animation */

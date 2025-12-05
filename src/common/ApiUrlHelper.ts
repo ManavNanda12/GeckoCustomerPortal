@@ -43,4 +43,8 @@ export class ApiUrlHelper {
   SitePolicy = {
     GetPolicy:'site-policy/get-site-policies'
   }
+  Address = {
+    GetAddressList:'address/get-address-list/{customerId}',
+    SaveAddress:'address/save-address'
+  }
 }

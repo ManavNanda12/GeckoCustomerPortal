@@ -9,6 +9,7 @@ import { Common } from '../../../services/common';
 import { Orders } from './orders/orders';
 import { ActivatedRoute } from '@angular/router';
 import { Wishlist } from './wishlist/wishlist';
+import { Address } from './address/address';
 
 @Component({
   selector: 'app-profile',
@@ -18,7 +19,8 @@ import { Wishlist } from './wishlist/wishlist';
     ReactiveFormsModule,
     FormsModule,
     Orders  ,
-    Wishlist
+    Wishlist,
+    Address
     ],
   templateUrl: './profile.html',
   styleUrl: './profile.css'
