@@ -14,6 +14,7 @@ export interface responseModel {
 })
 export class Common {
   baseUrl: string = 'https://localhost:44300/api/customer/';
+  generalBaseUrl: string = 'https://localhost:44300/api/';
   private readonly key = 'app_cart_session_id';
   private cartProductCount = new BehaviorSubject<any>(null);
   cartProductCount$ = this.cartProductCount.asObservable();
@@ -42,8 +43,9 @@ export class Common {
 
   // ✅ Common Methods with JWT Headers
   getData(url: string): Observable<responseModel> {
+    let baseUrl = url.includes('general') ? this.generalBaseUrl : this.baseUrl;
     return this.http
-      .get(this.baseUrl + url, { headers: this.getHeaders() })
+      .get(baseUrl + url, { headers: this.getHeaders() })
       .pipe(
         map((response: any) => {
           return {

@@ -3,10 +3,12 @@ import { Component } from '@angular/core';
 import { ApiUrlHelper } from '../../../../common/ApiUrlHelper';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Common } from '../../../../services/common';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { AddEditAddressDialog } from './add-edit-address-dialog/add-edit-address-dialog';
 
 @Component({
   selector: 'app-address',
-  imports: [CommonModule],
+  imports: [CommonModule , MatDialogModule],
   templateUrl: './address.html',
   styleUrl: './address.css'
 })
@@ -17,7 +19,8 @@ export class Address {
 
   constructor(private readonly api:ApiUrlHelper,
     private readonly spinner:NgxSpinnerService,
-    private readonly common:Common){}
+    private readonly common:Common,
+    private readonly dialog:MatDialog){}
 
   ngOnInit(): void {
     this.getAddressList();
@@ -37,6 +40,18 @@ export class Address {
       },
       complete:()=>{
         this.spinner.hide();
+      }
+    })
+  }
+
+  openAddressDialog(address:any){
+    let dialogRef = this.dialog.open(AddEditAddressDialog,{
+      data:{address},
+      disableClose:true
+    });
+    dialogRef.afterClosed().subscribe((result)=>{
+      if(result){
+        this.getAddressList();
       }
     })
   }

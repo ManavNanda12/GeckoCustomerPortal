@@ -1,0 +1,29 @@
+.dialog-title {
+  color: #1b1b1b;
+}
+
+.dialog-form {
+  background: #ffffff;
+  padding: 10px;
+  border-radius: 10px;
+  color: #3a3a3a;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+button[mat-raised-button] {
+  background: linear-gradient(90deg, #007bff, #0056b3);
+  color: white;
+}
+
+::ng-deep .mat-mdc-dialog-surface {
+  overflow-y: unset !important;
+}

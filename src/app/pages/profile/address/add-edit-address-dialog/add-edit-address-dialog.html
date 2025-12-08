@@ -1,0 +1,56 @@
+<h2 mat-dialog-title class="dialog-title">
+  {{ address ? 'Update Address' : 'Add New Address' }}
+</h2>
+
+<form [formGroup]="addressForm" class="dialog-form" (ngSubmit)="submitForm()">
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Address Nickname</mat-label>
+    <input matInput formControlName="addressName" placeholder="Home, Office, etc." />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Full Address</mat-label>
+    <textarea matInput rows="2" formControlName="fullAddress"></textarea>
+  </mat-form-field>
+
+  <div class="row">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Country</mat-label>
+       <mat-select formControlName="countryName" (selectionChange)="getStates(true)">
+          @for (country of countries; track country) {
+            <mat-option [value]="country.countryId">{{country.countryName}}</mat-option>
+          }
+       </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>State</mat-label>
+      <mat-select formControlName="stateName" (selectionChange)="getCities(true)">
+        @for (state of states; track state) {
+          <mat-option [value]="state.stateId">{{state.stateName}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>City</mat-label>
+    <mat-select formControlName="cityName">
+      @for (city of cities; track city) {
+        <mat-option [value]="city.cityId">{{city.cityName}}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <div class="dialog-actions">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button 
+      mat-raised-button color="primary" 
+      type="submit" 
+      [disabled]="addressForm.invalid"
+    >
+      {{ address ? 'Update' : 'Save' }}
+    </button>
+  </div>
+</form>
