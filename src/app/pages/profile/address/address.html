@@ -10,6 +10,7 @@
       <div 
         class="address-card shadow-sm border-0"
         [ngClass]="{'default-address': address.isDefault}"
+        (click)="makeAddressDefault(address)"
       >
         <div class="card-body p-3">
           <h5 class="address-title mb-1">

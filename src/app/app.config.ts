@@ -13,7 +13,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideSpinnerConfig({ type: 'ball-scale-multiple'}),
-    provideToastr({ positionClass: 'toast-bottom-right' }),
+    provideToastr({ positionClass: 'toast-top-right' }),
     provideAnimationsAsync(),
     provideHttpClient()
   ]

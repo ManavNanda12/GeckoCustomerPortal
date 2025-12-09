@@ -5,6 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Common } from '../../../../services/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AddEditAddressDialog } from './add-edit-address-dialog/add-edit-address-dialog';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-address',
@@ -20,7 +21,9 @@ export class Address {
   constructor(private readonly api:ApiUrlHelper,
     private readonly spinner:NgxSpinnerService,
     private readonly common:Common,
-    private readonly dialog:MatDialog){}
+    private readonly dialog:MatDialog,
+    private toastr:ToastrService
+  ){}
 
   ngOnInit(): void {
     this.getAddressList();
@@ -52,6 +55,25 @@ export class Address {
     dialogRef.afterClosed().subscribe((result)=>{
       if(result){
         this.getAddressList();
+      }
+    })
+  }
+
+  makeAddressDefault(address:any){
+    let api = this.api.Address.MakeAddressDefault.replace('{addressId}',address.addressId);
+    this.spinner.show();
+    this.common.getData(api).pipe().subscribe({
+      next:(response)=>{
+        if(response.success){
+          this.toastr.success(response.message);
+          this.getAddressList();
+        }
+      },
+      error:(error)=>{
+        console.log(error);
+      },
+      complete:()=>{
+        this.spinner.hide();
       }
     })
   }
