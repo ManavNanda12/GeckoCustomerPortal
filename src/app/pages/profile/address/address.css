@@ -9,12 +9,10 @@
 .address-card {
   background: #1e1e1e;
   border-radius: 14px;
-  padding: 16px;
   height: 200px;
   display: flex;
   flex-direction: column;
   transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
-  cursor: pointer;
   border: 2px solid transparent;
 }
 
@@ -27,6 +25,17 @@
 .address-card.default-address {
   border: 2px solid #00c853 !important;
   box-shadow: 0 0 12px rgba(0, 200, 83, 0.6) !important;
+}
+
+/* Make the card body clickable */
+.card-body {
+  cursor: pointer;
+  flex: 1;
+}
+
+/* Action buttons area - not clickable for default selection */
+.action-buttons {
+  cursor: default;
 }
 
 /* Text Styling */
@@ -56,5 +65,14 @@
 
 .btn-primary:hover {
   background: linear-gradient(90deg, #0056b3, #007bff);
+  transform: scale(1.05);
+}
+
+.btn-danger {
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
   transform: scale(1.05);
 }

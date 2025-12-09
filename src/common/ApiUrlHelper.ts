@@ -46,7 +46,8 @@ export class ApiUrlHelper {
   Address = {
     GetAddressList:'address/get-address-list/{customerId}',
     SaveAddress:'address/save-address',
-    MakeAddressDefault:'address/update-default-address/{addressId}'
+    MakeAddressDefault:'address/update-default-address/{addressId}',
+    DeleteAddress:'address/delete-address/{addressId}'
   }
   General = {
     GetCountryList:'general/get-country-list',

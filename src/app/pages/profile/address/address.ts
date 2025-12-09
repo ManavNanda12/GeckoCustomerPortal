@@ -60,6 +60,9 @@ export class Address {
   }
 
   makeAddressDefault(address:any){
+    if(address.isDefault){
+      return;
+    }
     let api = this.api.Address.MakeAddressDefault.replace('{addressId}',address.addressId);
     this.spinner.show();
     this.common.getData(api).pipe().subscribe({
@@ -76,6 +79,30 @@ export class Address {
         this.spinner.hide();
       }
     })
+  }
+
+  deleteAddress(address:any){
+    if(address.isDefault){
+      this.toastr.error('You cannot delete default address');
+      return;
+    }
+    let api = this.api.Address.DeleteAddress.replace('{addressId}',address.addressId);
+    this.spinner.show();
+    this.common.deleteData(api).pipe().subscribe({
+      next:(response)=>{
+        if(response.success){
+          this.toastr.success(response.message);
+          this.getAddressList();
+        }
+      },
+      error:(error)=>{
+        console.log(error);
+      },
+      complete:()=>{
+        this.spinner.hide();
+      }
+    })
+
   }
 
 }
