@@ -1,6 +1,6 @@
 <footer class="app-footer">
   <div class="footer-content">
-    <p class="footer-logo">My App © {{ currentYear}}</p>
+    <p class="footer-logo">Gecko © {{ currentYear}}</p>
 
     <ul class="footer-links">
       <li><a routerLink="/privacy-policy">Privacy</a></li>
@@ -9,10 +9,10 @@
     </ul>
 
     <div class="footer-social">
-      <a href="#"><i class="fa-brands fa-facebook"></i></a>
-      <a href="#"><i class="fa-brands fa-twitter"></i></a>
-      <a href="#"><i class="fa-brands fa-instagram"></i></a>
-      <a href="#"><i class="fa-brands fa-github"></i></a>
+      <a [href]=facebookLink target="_blank"><i class="fa-brands fa-facebook"></i></a>
+      <a [href]=twitterLink target="_blank"><i class="fa-brands fa-twitter"></i></a>
+      <a [href]=instagramLink target="_blank"><i class="fa-brands fa-instagram"></i></a>
+      <a [href]=youtubeLink target="_blank"><i class="fa-brands fa-github"></i></a>
     </div>
   </div>
 </footer>
