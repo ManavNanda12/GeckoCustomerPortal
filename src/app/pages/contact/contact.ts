@@ -34,7 +34,7 @@ export class Contact {
     {
       icon: 'email',
       title: 'Email Us',
-      content: 'hello@company.com',
+      content: 'gecko@company.com',
       delay: '0.2s'
     },
     {
