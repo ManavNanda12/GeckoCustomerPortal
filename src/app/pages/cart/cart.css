@@ -197,6 +197,20 @@
     transform: translateY(-3px);
     box-shadow: 0 6px 15px rgba(0,0,0,0.3);
   }
+
+.btn-animated-danger {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.btn-animated-danger:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
   
   /* Optional shine effect */
   .btn-animated-info::after {

@@ -43,7 +43,9 @@
       <p><strong>Payment Method:</strong> {{ orderDetails[0].paymentMethod }}</p>
       <p><strong>Tax:</strong> ₹{{ orderDetails[0].taxAmount | number:'1.2-2' }}</p>
       <p><strong>Shipping:</strong> ₹{{ orderDetails[0].shippingAmount | number:'1.2-2' }}</p>
-      <p><strong>Discount:</strong> ₹{{ orderDetails[0].discountAmount | number:'1.2-2' }}</p>
+      <p><strong>Discount:</strong> ₹{{ orderDetails[0].discountAmount | number:'1.2-2' }}  <span *ngIf="orderDetails[0]?.couponCode" class="coupon-box">
+            (Coupon: {{ orderDetails[0]?.couponCode }})
+      </span></p>
       <p class="total"><strong>Total:</strong> ₹{{ orderDetails[0].total | number:'1.2-2' }}</p>
     </div>
 

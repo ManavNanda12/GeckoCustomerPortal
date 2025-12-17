@@ -70,8 +70,16 @@
       <button
         class="btn btn-animated-info apply-btn"
         (click)="applyCoupon()"
+        *ngIf="couponCode && !(cartItems.length > 0 && cartItems[0]?.couponCode)"
       >
         Apply
+      </button>
+           <button
+        class="btn btn-animated-danger apply-btn"
+        (click)="removeCoupon()"
+        *ngIf="cartItems.length > 0 && cartItems[0]?.couponCode"
+      >
+        Remove
       </button>
     </div>
 
@@ -93,7 +101,7 @@
       <h4>
         Grand Total:
         <span class="text-highlight">
-          $ {{ getFinalTotal() | number : '1.2-2' }}
+          $ {{ totalAmount | number : '1.2-2' }}
         </span>
       </h4>
 

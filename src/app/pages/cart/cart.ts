@@ -26,6 +26,7 @@ export class Cart implements OnInit, OnDestroy {
   couponCode: string = "";
   couponResponse: any;
   couponDiscount: number = 0; 
+  totalAmount: number = 0;
 
   constructor(
     private readonly common: Common,
@@ -69,6 +70,12 @@ export class Cart implements OnInit, OnDestroy {
         this.common.setCartProductCount(this.cartItems.length);
         if(this.cartItems[0]?.cartId > 0 && this.customerId > 0 && this.cartItems.length > 0 && this.cartItems[0]?.customerId == 0){
           this.updateCartCustomerId();
+        }
+          this.totalAmount = this.cartItems[0].subTotal;
+        if(this.cartItems[0]?.couponCode){
+          this.couponResponse = { success: true, message: "Coupon already applied" };
+          this.couponCode = this.cartItems[0].couponCode;
+          this.couponDiscount = this.cartItems[0].discountAmount;
         }
       },
       error: (err: any) => {
@@ -274,20 +281,18 @@ export class Cart implements OnInit, OnDestroy {
   applyCoupon() {
   if (!this.couponCode) return;
   this.spinner.show();
-  let api = this.api.Coupon.ApplyCoupon.replace("{couponCode}", this.couponCode);
-  this.common.getData(api).pipe().subscribe({
+   let requestedModel ={
+      cartSessionId: this.common.getSessionId(),
+      couponCode: this.couponCode
+    }
+  let api = this.api.Coupon.ApplyCoupon;
+  this.common.postData(api, requestedModel).pipe().subscribe({
     next: (res) => {
       this.couponResponse = res;
       if(res.success){
         this.toastr.success(res.message);
+        this.getCartDetails();
       }
-       const cartTotal = this.getCartTotal();
-
-        if (res.data.discountType === "Percentage") {
-          this.couponDiscount = (cartTotal * res.data.discountValue) / 100;
-        } else if (res.data.discountType === "Flat") {
-          this.couponDiscount = res.data.discountValue;
-        }
     },
     error: (err: any) => {
       this.toastr.error("Failed to apply coupon", "Error");
@@ -296,9 +301,31 @@ export class Cart implements OnInit, OnDestroy {
   })
 }
 
-getFinalTotal() {
-  return this.getCartTotal() - this.couponDiscount;
+removeCoupon() {
+  if (!this.couponCode) return;
+  this.spinner.show();
+  let requestedModel = {
+    cartSessionId: this.common.getSessionId()
+  };
+  let api = this.api.Coupon.RemoveCoupon.replace('{CartSessionId}', this.common.getSessionId());
+  this.common.postData(api, requestedModel).pipe().subscribe({
+    next: (res) => {
+      this.couponResponse = res;
+      if(res.success){
+        this.toastr.success(res.message);
+        this.couponCode = '';
+        this.couponDiscount = 0;
+        this.couponResponse = { success: null, message: "Coupon already applied" };
+        this.getCartDetails();
+      }
+    },
+    error: (err: any) => {
+      this.toastr.error("Failed to remove coupon", "Error");
+    },
+    complete: () => { this.spinner.hide(); }
+  })
 }
+
 
 
 }
