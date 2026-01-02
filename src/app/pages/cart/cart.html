@@ -112,6 +112,14 @@
         </span>
       </div>
 
+      <!-- Show final total after discount -->
+      <h4 class="mt-3">
+        Final Total:
+        <span class="text-highlight">
+          $ {{ discountedTotalAmount | number : '1.2-2' }}
+        </span>
+      </h4>
+
       <button class="btn btn-animated-info mt-3" (click)="checkout()" [disabled]="getIsOutOfStock()">Proceed to Checkout</button>
     </div>
   </div>

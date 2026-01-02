@@ -46,7 +46,8 @@
       <p><strong>Discount:</strong> ₹{{ orderDetails[0].discountAmount | number:'1.2-2' }}  <span *ngIf="orderDetails[0]?.couponCode" class="coupon-box">
             (Coupon: {{ orderDetails[0]?.couponCode }})
       </span></p>
-      <p class="total"><strong>Total:</strong> ₹{{ orderDetails[0].total | number:'1.2-2' }}</p>
+      <p><strong>Total Product Cost:</strong> ₹{{ orderDetails[0].total | number:'1.2-2' }}</p>
+      <p class="total"><strong>Grand Total:</strong> ₹{{ orderDetails[0].total  + (orderDetails[0].taxAmount - orderDetails[0].discountAmount )| number:'1.2-2' }}</p>
     </div>
 
     <div class="footer">

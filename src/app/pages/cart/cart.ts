@@ -27,6 +27,7 @@ export class Cart implements OnInit, OnDestroy {
   couponResponse: any;
   couponDiscount: number = 0; 
   totalAmount: number = 0;
+  discountedTotalAmount: number = 0;
 
   constructor(
     private readonly common: Common,
@@ -72,10 +73,12 @@ export class Cart implements OnInit, OnDestroy {
           this.updateCartCustomerId();
         }
           this.totalAmount = this.cartItems[0].subTotal;
+          this.discountedTotalAmount = this.totalAmount - this.couponDiscount;
         if(this.cartItems[0]?.couponCode){
           this.couponResponse = { success: true, message: "Coupon already applied" };
           this.couponCode = this.cartItems[0].couponCode;
           this.couponDiscount = this.cartItems[0].discountAmount;
+          this.discountedTotalAmount = this.totalAmount - this.couponDiscount;
         }
       },
       error: (err: any) => {
