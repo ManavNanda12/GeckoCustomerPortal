@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BehaviorSubject, catchError, map, Observable, Subject, throwError } from 'rxjs';
+import { Router } from '@angular/router';
 
 export interface responseModel {
   success: boolean;
@@ -23,8 +24,9 @@ export class Common {
 
   constructor(
     private readonly http: HttpClient,
-    private spinner: NgxSpinnerService
-  ) {}
+    private spinner: NgxSpinnerService,
+    private router: Router
+  ) { }
 
   private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('JwtToken');
@@ -41,6 +43,18 @@ export class Common {
     return headers;
   }
 
+  // Handle 401 Unauthorized errors (token expired)
+  private handleAuthError(error: any): Observable<never> {
+    if (error.status === 401) {
+      // Clear all localStorage items
+      localStorage.clear();
+      // Navigate to login page
+      this.router.navigate(['/login']);
+    }
+    this.spinner.hide();
+    return throwError(() => error);
+  }
+
   // ✅ Common Methods with JWT Headers
   getData(url: string): Observable<responseModel> {
     let baseUrl = url.includes('general') ? this.generalBaseUrl : this.baseUrl;
@@ -54,10 +68,7 @@ export class Common {
             data: response.data,
           };
         }),
-        catchError((error: any) => {
-          this.spinner.hide();
-          return throwError(() => error);
-        })
+        catchError((error: any) => this.handleAuthError(error))
       );
   }
 
@@ -72,10 +83,7 @@ export class Common {
             data: response.data,
           };
         }),
-        catchError((error: any) => {
-          this.spinner.hide();
-          return throwError(() => error);
-        })
+        catchError((error: any) => this.handleAuthError(error))
       );
   }
 
@@ -90,10 +98,7 @@ export class Common {
             data: response.data,
           };
         }),
-        catchError((error: any) => {
-          this.spinner.hide();
-          return throwError(() => error);
-        })
+        catchError((error: any) => this.handleAuthError(error))
       );
   }
 
@@ -108,10 +113,7 @@ export class Common {
             data: response.data,
           };
         }),
-        catchError((error: any) => {
-          this.spinner.hide();
-          return throwError(() => error);
-        })
+        catchError((error: any) => this.handleAuthError(error))
       );
   }
 
@@ -136,14 +138,11 @@ export class Common {
           data: response.data,
         };
       }),
-      catchError((error: any) => {
-        this.spinner.hide();
-        return throwError(() => error);
-      })
+      catchError((error: any) => this.handleAuthError(error))
     );
   }
 
-   private generateUniqueId(): string {
+  private generateUniqueId(): string {
     if (crypto && 'randomUUID' in crypto) {
       return 'CART-' + crypto.randomUUID();
     }
