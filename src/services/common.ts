@@ -14,8 +14,8 @@ export interface responseModel {
   providedIn: 'root',
 })
 export class Common {
-  baseUrl: string = 'https://localhost:44300/api/customer/';
-  generalBaseUrl: string = 'https://localhost:44300/api/';
+  baseUrl: string = 'https://geckoapi-manav-eqcmaahyfdcxdhcd.centralindia-01.azurewebsites.net/api/customer/';
+  generalBaseUrl: string = 'https://geckoapi-manav-eqcmaahyfdcxdhcd.centralindia-01.azurewebsites.net/api/';
   private readonly key = 'app_cart_session_id';
   private cartProductCount = new BehaviorSubject<any>(null);
   cartProductCount$ = this.cartProductCount.asObservable();
