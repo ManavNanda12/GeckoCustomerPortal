@@ -10,6 +10,7 @@ import { Orders } from './orders/orders';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Wishlist } from './wishlist/wishlist';
 import { Address } from './address/address';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-profile',
@@ -46,7 +47,8 @@ export class Profile implements OnInit {
 
   constructor(private readonly fb:FormBuilder , private readonly api:ApiUrlHelper,
               private readonly spinner:NgxSpinnerService , private readonly common:Common,
-              private readonly activatedRoute:ActivatedRoute , private readonly router:Router  
+              private readonly activatedRoute:ActivatedRoute , private readonly router:Router,
+              private readonly toastr:ToastrService
             ){
     this.activatedRoute.url.subscribe((params) => {
       this.activeTab = params[1]?.path || 'home';
@@ -91,9 +93,36 @@ export class Profile implements OnInit {
   }
 
   onSubmit() {
+    let api = this.api.Customer.SaveCustomer;
     if (this.profileForm.valid) {
-      console.log('Form submitted:', this.profileForm.getRawValue());
-      this.toggleEdit();
+      this.profileForm.get('email')?.enable();
+      this.spinner.show();
+      let requestedModel = {
+        CustomerId: this.customerId,
+        FirstName: this.profileForm.value.firstName,
+        LastName: this.profileForm.value.lastName,
+        Email: this.profileForm.value.email,
+        ContactNumber: this.profileForm.value.contactNumber,
+        CountryCode:'+91'
+      }
+    this.common.postData(api,requestedModel).pipe().subscribe({
+      next: (response) => {
+        if(response.success){
+          this.toastr.success(response.message);
+          this.toggleEdit();
+        }
+        else{
+          this.toastr.error(response.message);
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete:()=>{
+        this.profileForm.get('email')?.disable();
+        this.spinner.hide();
+      }
+    })
     }
   }
 
