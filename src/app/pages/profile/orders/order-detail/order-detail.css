@@ -171,3 +171,40 @@
     font-size: 14px;
     margin-left: 10px;
 }
+
+@media (max-width: 900px) {
+  .order-detail-container {
+    width: 95vw;
+    max-width: 95vw;
+    max-height: 90vh;
+    padding: 16px;
+  }
+
+  .order-detail-content {
+    max-height: calc(90vh - 80px);
+  }
+
+  .product-list {
+    grid-template-columns: 1fr;
+  }
+
+  .product-card {
+    height: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .order-detail-container {
+    border-radius: 12px;
+    padding: 12px;
+  }
+
+  .title {
+    font-size: 1.4rem;
+  }
+
+  .order-summary {
+    padding: 12px 14px;
+  }
+
+}

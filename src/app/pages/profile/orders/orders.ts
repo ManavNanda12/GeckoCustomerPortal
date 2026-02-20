@@ -86,8 +86,8 @@ export class Orders implements OnInit {
   navigateToOrderDetail(orderId: number): void {
      this.dialog.open(OrderDetail, {
         data: { orderId: orderId },
-        maxWidth:'800px',
-        width:'800px',
+         maxWidth: '100vw',
+        width: 'auto',
         disableClose:true
         
       });
