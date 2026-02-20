@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BehaviorSubject, catchError, map, Observable, Subject, throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import { environment } from '../environments/environment';
 
 export interface responseModel {
   success: boolean;
@@ -14,8 +15,8 @@ export interface responseModel {
   providedIn: 'root',
 })
 export class Common {
-  baseUrl: string = 'https://geckoapi-manav-eqcmaahyfdcxdhcd.centralindia-01.azurewebsites.net/api/customer/';
-  generalBaseUrl: string = 'https://geckoapi-manav-eqcmaahyfdcxdhcd.centralindia-01.azurewebsites.net/api/';
+  baseUrl: string = environment.apiUrl;
+  generalBaseUrl: string = environment.generalUrl;
   private readonly key = 'app_cart_session_id';
   private cartProductCount = new BehaviorSubject<any>(null);
   cartProductCount$ = this.cartProductCount.asObservable();
