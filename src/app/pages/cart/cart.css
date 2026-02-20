@@ -253,15 +253,17 @@
 .celebration-overlay {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at center, #050505 20%, #000 100%);
+  background:
+    radial-gradient(circle at center, rgba(0, 255, 255, 0.2) 0, transparent 60%),
+    rgba(0, 0, 0, 0.88);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 3000;
   overflow: hidden;
-  backdrop-filter: blur(4px);
-  animation: fadeInBg 1.5s ease forwards;
+  backdrop-filter: blur(6px);
+  animation: fadeInBg 0.8s ease forwards;
 }
 
 /* Fireworks Canvas */
@@ -280,6 +282,8 @@
   color: #fff;
   text-align: center;
   padding: 40px 60px;
+  max-width: 90vw;
+  box-sizing: border-box;
   background: rgba(15, 15, 15, 0.7);
   border-radius: 20px;
   border: 2px solid rgba(0, 255, 255, 0.2);
@@ -308,6 +312,21 @@
   color: #bdbdbd;
   margin-top: 5px;
   animation: fadeInText 2s ease forwards;
+}
+
+@media (max-width: 600px) {
+  .congrats-box {
+    padding: 24px 18px;
+    max-width: 85vw;
+  }
+
+  .congrats-box h2 {
+    font-size: 1.8rem;
+  }
+
+  .congrats-box p {
+    font-size: 1rem;
+  }
 }
 
 .coupon-label {
