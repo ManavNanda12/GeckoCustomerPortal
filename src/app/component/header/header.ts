@@ -18,6 +18,7 @@ export class Header {
   cartItems: number = 0;
   isLoggedIn: boolean = false;
   customerId: number =0;
+  isMobileMenuOpen: boolean = false;
 
   constructor(
     private readonly common: Common,
@@ -55,6 +56,10 @@ export class Header {
       },
       complete: () => { this.spinner.hide(); }
     })
+  }
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
 
   animateCart() {

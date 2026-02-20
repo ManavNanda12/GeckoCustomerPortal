@@ -47,6 +47,35 @@
   position: relative;
 }
 
+/* === Hamburger Button (Mobile) === */
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 255, 255, 0.6);
+  background: rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.hamburger-btn .hamburger-line {
+  width: 20px;
+  height: 2px;
+  background: #00ffff;
+  border-radius: 2px;
+  box-shadow: 0 0 6px rgba(0, 255, 255, 0.7);
+}
+
+.hamburger-btn:hover {
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
+  transform: translateY(-1px);
+}
+
 /* === Navigation Bar === */
 .nav-bar {
   flex: 1;
@@ -294,10 +323,78 @@
   width: 80%;
 }
 
+/* === Mobile Slide-in Menu === */
+.mobile-menu-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 900;
+}
+
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 50%;
+  max-width: 320px;
+  height: 100vh;
+  background: rgba(10, 10, 10, 0.98);
+  border-left: 1px solid rgba(0, 255, 255, 0.4);
+  box-shadow: -5px 0 25px rgba(0, 255, 255, 0.35);
+  transform: translateX(100%);
+  transition: transform 0.3s ease-out;
+  z-index: 950;
+  padding: 4.5rem 1.5rem 1.5rem;
+}
+
+.mobile-menu.open {
+  transform: translateX(0);
+}
+
+.mobile-nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mobile-nav-links a {
+  display: block;
+  color: #e0ffff;
+  text-decoration: none;
+  font-size: 1.1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  background: rgba(0, 255, 255, 0.03);
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.mobile-nav-links a:hover,
+.mobile-nav-links a.active {
+  background: rgba(0, 255, 255, 0.08);
+  border-color: rgba(0, 255, 255, 0.4);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+  color: #00ffff;
+}
+
 /* === Responsive Design === */
 @media (max-width: 768px) {
   .app-header {
     padding: 0.8rem 1rem;
+  }
+  
+  .hamburger-btn {
+    display: flex;
+  }
+  
+  .desktop-nav {
+    display: none;
   }
   
   .nav-links {
@@ -325,16 +422,8 @@
 
 @media (max-width: 480px) {
   .header-container {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .nav-bar {
-    order: 2;
-  }
-  
-  .cart-icon, .profile-icon {
-    order: 1;
+    flex-direction: row;
+    gap: 0.5rem;
   }
   
   .nav-links {
