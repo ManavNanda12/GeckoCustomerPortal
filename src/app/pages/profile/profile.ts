@@ -7,7 +7,7 @@ import { ApiUrlHelper } from '../../../common/ApiUrlHelper';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Common } from '../../../services/common';
 import { Orders } from './orders/orders';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Wishlist } from './wishlist/wishlist';
 import { Address } from './address/address';
 
@@ -46,7 +46,7 @@ export class Profile implements OnInit {
 
   constructor(private readonly fb:FormBuilder , private readonly api:ApiUrlHelper,
               private readonly spinner:NgxSpinnerService , private readonly common:Common,
-              private readonly activatedRoute:ActivatedRoute  
+              private readonly activatedRoute:ActivatedRoute , private readonly router:Router  
             ){
     this.activatedRoute.url.subscribe((params) => {
       this.activeTab = params[1]?.path || 'home';
@@ -119,5 +119,12 @@ export class Profile implements OnInit {
         this.spinner.hide();
       }
     })
+  }
+  
+  logOut(){
+    localStorage.removeItem('CustomerId');
+    localStorage.removeItem('JwtToken');
+    sessionStorage.removeItem('app_cart_session_id');
+    this.router.navigate(['/']);
   }
 }

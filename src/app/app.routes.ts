@@ -22,6 +22,11 @@ export const routes: Routes = [
       import('./pages/auth/login/login').then((s) => s.Login),
   },
   {
+    path:'sign-up',
+    loadComponent: () =>
+      import('./pages/auth/sign-up/sign-up').then((s) => s.SignUp),
+  },
+  {
     path: '',
     component: MainLayout,
     children: [

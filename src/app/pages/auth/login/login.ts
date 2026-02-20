@@ -91,4 +91,8 @@ export class Login implements AfterViewInit,OnInit {
     })
   }
 
+  signUp(){
+    this.router.navigate(['/sign-up']);
+  }
+
 }

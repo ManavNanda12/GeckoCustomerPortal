@@ -1,0 +1,34 @@
+<div class="main-content">
+    <!-- Background Video -->
+    <video autoplay muted loop playsinline class="bg-video">
+      <source src="/assets/videos/gym-bg.mp4" type="video/mp4" />
+    </video>
+  
+    <!-- Content Overlay -->
+    <div class="content-overlay">
+      <div class="login-box">
+        <form [formGroup]="signUpForm" (ngSubmit)="submitSignUpForm()">
+        <h2>Hey Champion!</h2>
+        <input type="text" placeholder="First Name" class="email-input" formControlName="FirstName" oninput="this.value = this.value.replace(/^\s+/, '')"/>
+        <mat-error *ngIf="submitted && signUpForm.get('FirstName')?.invalid" class="text-danger">
+          First Name is required
+        </mat-error>
+        <input type="text" placeholder="Last Name" class="email-input" formControlName="LastName" oninput="this.value = this.value.replace(/^\s+/, '')"/>
+        <mat-error *ngIf="submitted && signUpForm.get('LastName')?.invalid" class="text-danger">
+          Last Name is required
+        </mat-error>
+        <input type="email" placeholder="Email" class="email-input" formControlName="Email" oninput="this.value = this.value.replace(/^\s+/, '')"/>
+        <mat-error *ngIf="submitted && signUpForm.get('Email')?.invalid" class="text-danger">
+          Email is required
+        </mat-error>
+        <input type="tel" placeholder="Mobile Number" class="email-input" formControlName="MobileNumber" oninput="this.value = this.value.replace(/^\s+/, '')"/>
+        <mat-error *ngIf="submitted && signUpForm.get('MobileNumber')?.invalid" class="text-danger">
+          Mobile Number is required
+        </mat-error>
+        <button class="mt-2 mb-2 signup-btn" type="submit">Sign Up</button>
+        <button type="button" class="login-btn" (click)="login()">Login</button>
+      </form>
+      </div>
+    </div>
+  </div>
+  
