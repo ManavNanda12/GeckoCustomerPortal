@@ -51,59 +51,106 @@ export class Cart implements OnInit, OnDestroy {
     private readonly ngZone: NgZone,
   ) {}
 
-  async ngOnInit(): Promise<void> {
-    this.customerId = Number(localStorage.getItem('CustomerId')) || 0;
+ async ngOnInit(): Promise<void> {
+  this.customerId = Number(localStorage.getItem('CustomerId')) || 0;
+  
+  // First get cart details to have the correct amount
+  await new Promise<void>((resolve) => {
     this.getCartDetails();
-    await this.initializeStripe();
-  }
+    // Wait for cart details to load
+    const checkCart = setInterval(() => {
+      if (this.discountedTotalAmount !== undefined) {
+        clearInterval(checkCart);
+        resolve();
+      }
+    }, 100);
+  });
+  
+  // Then initialize Stripe with the correct amount
+  await this.initializeStripe();
+}
 
-  async initializeStripe(): Promise<void> {
-    try {
-      this.stripe = await this.stripePromise;
-      this.elements = this.stripe.elements();
-      
-      // Initialize regular card element
-      this.card = this.elements.create('card', {
-        style: {
-          base: {
-            color: '#ffffff',
-            iconColor: '#00ffff',
-            fontFamily: 'Poppins, system-ui, sans-serif',
-            fontSize: '16px',
-            '::placeholder': {
-              color: '#777777',
-            },
-          },
-          invalid: {
-            color: '#ff6b6b',
-            iconColor: '#ff6b6b',
+async initializeStripe(): Promise<void> {
+  try {
+    this.stripe = await this.stripePromise;
+    
+    if (!this.stripe) {
+      console.error('Failed to load Stripe');
+      this.toastr.error('Failed to load payment system');
+      return;
+    }
+    
+    this.elements = this.stripe.elements();
+    
+    // Initialize regular card element
+    this.card = this.elements.create('card', {
+      style: {
+        base: {
+          color: '#ffffff',
+          iconColor: '#00ffff',
+          fontFamily: 'Poppins, system-ui, sans-serif',
+          fontSize: '16px',
+          '::placeholder': {
+            color: '#777777',
           },
         },
-      });
+        invalid: {
+          color: '#ff6b6b',
+          iconColor: '#ff6b6b',
+        },
+      },
+    });
 
-      // Wait for the DOM element to be ready before mounting
+    // Use ngZone to ensure Angular knows about the DOM changes
+    this.ngZone.run(() => {
+      // Wait for Angular to render the template
       setTimeout(() => {
         const cardElement = document.getElementById('card-element');
+        console.log('Card element found:', !!cardElement);
+        
         if (cardElement) {
-          this.card.mount('#card-element');
+          try {
+            this.card.mount('#card-element');
+            console.log('Card element mounted successfully');
 
-          this.card.on('change', (event: any) => {
-            const displayError = document.getElementById('card-errors');
-            if (displayError) {
-              displayError.textContent = event.error ? event.error.message : '';
+            this.card.on('change', (event: any) => {
+              const displayError = document.getElementById('card-errors');
+              if (displayError) {
+                displayError.textContent = event.error ? event.error.message : '';
+              }
+              this.cardComplete = event.complete;
+            });
+          } catch (error) {
+            console.error('Error mounting card element:', error);
+            this.toastr.error('Failed to load card input');
+          }
+        } else {
+          console.error('card-element not found in DOM');
+          // Retry after a longer delay for slow mobile devices
+          setTimeout(() => {
+            const retryElement = document.getElementById('card-element');
+            if (retryElement) {
+              this.card.mount('#card-element');
+              this.card.on('change', (event: any) => {
+                const displayError = document.getElementById('card-errors');
+                if (displayError) {
+                  displayError.textContent = event.error ? event.error.message : '';
+                }
+                this.cardComplete = event.complete;
+              });
             }
-            this.cardComplete = event.complete;
-          });
+          }, 500);
         }
-      }, 100);
+      }, 300); // Increased timeout for mobile
+    });
 
-      // Initialize Payment Request Button (Google Pay / Apple Pay)
-      await this.initializePaymentRequest();
-    } catch (error) {
-      console.error('Failed to initialize Stripe:', error);
-      this.toastr.error('Failed to load payment system');
-    }
+    // Initialize Payment Request Button
+    await this.initializePaymentRequest();
+  } catch (error) {
+    console.error('Failed to initialize Stripe:', error);
+    this.toastr.error('Failed to load payment system');
   }
+}
 
   async initializePaymentRequest(): Promise<void> {
     if (!this.stripe) return;
@@ -297,7 +344,9 @@ export class Cart implements OnInit, OnDestroy {
 
         this.couponCode = cartSummary?.couponCode || null;
         this.couponDiscount = cartSummary?.discountAmount || 0;
-
+       this.ngZone.run(() => {
+          this.updatePaymentRequestAmount();
+        });
         if (this.couponCode) {
           this.couponResponse = {
             success: true,
