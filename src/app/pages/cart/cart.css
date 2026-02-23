@@ -603,3 +603,290 @@
     left: 30px;
   }
 }
+
+/* Payment method Css */
+/* Payment Section Styling */
+.payment-section {
+  background: rgba(30, 30, 50, 0.5);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.payment-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #00ffff;
+  display: block;
+  margin-bottom: 15px;
+}
+
+.card-label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* Payment Request Button (Google Pay / Apple Pay) */
+.payment-request-section {
+  margin-bottom: 20px;
+}
+
+.payment-request-button-wrapper {
+  margin-bottom: 15px;
+}
+
+#payment-request-button {
+  width: 100%;
+  min-height: 48px;
+}
+
+/* Payment Divider */
+.payment-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+  position: relative;
+}
+
+.payment-divider::before,
+.payment-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.payment-divider span {
+  padding: 0 15px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* Card Payment Section */
+.card-payment-section {
+  margin-top: 15px;
+}
+
+/* Stripe Card Element */
+.stripe-card-element {
+  background: rgba(20, 20, 40, 0.6);
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.stripe-card-element:hover,
+.stripe-card-element:focus-within {
+  border-color: #00ffff;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+}
+
+/* Security Badge */
+.security-badge {
+  margin-top: 15px;
+  padding: 10px;
+  background: rgba(0, 255, 255, 0.05);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.security-badge i {
+  color: #55efc4;
+  font-size: 14px;
+}
+
+.security-badge small {
+  font-size: 12px;
+}
+
+/* Pay Button Enhancement */
+.btn-animated-info.w-100 {
+  background: linear-gradient(135deg, #00d4d4 0%, #0099ff 100%);
+  border: none;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.btn-animated-info.w-100:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 212, 212, 0.4);
+}
+
+.btn-animated-info.w-100:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Card Errors */
+#card-errors {
+  font-size: 13px;
+  margin-top: 8px;
+  min-height: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 576px) {
+  .payment-section {
+    padding: 15px;
+  }
+
+  .payment-label {
+    font-size: 15px;
+  }
+
+  .btn-animated-info.w-100 {
+    font-size: 15px;
+    padding: 12px;
+  }
+}
+
+/* Price Info Icon (from previous implementation) */
+.price-info-icon {
+  font-size: 18px;
+  color: #00ffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.price-info-icon:hover {
+  color: #00d4d4;
+  transform: scale(1.2);
+}
+
+/* Custom Price Breakdown Popup */
+.price-breakdown-popup {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 10px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #ffffff;
+  padding: 16px 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 255, 255, 0.4);
+  border: 2px solid #00ffff;
+  min-width: 280px;
+  z-index: 9999;
+  animation: popupSlideIn 0.3s ease;
+}
+
+/* Arrow for the popup */
+.price-breakdown-popup::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #00ffff;
+}
+
+.price-breakdown-popup::after {
+  content: '';
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid #1a1a2e;
+}
+
+.popup-title {
+  font-size: 15px;
+  margin-bottom: 8px;
+  color: #00ffff;
+  text-align: center;
+}
+
+.price-breakdown-popup hr {
+  margin: 10px 0;
+  border-color: rgba(0, 255, 255, 0.3);
+  opacity: 0.5;
+}
+
+.popup-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.popup-row span:first-child {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.popup-row span:last-child {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.popup-row.text-success span {
+  color: #55efc4 !important;
+  font-weight: 600;
+}
+
+.popup-total {
+  font-weight: bold;
+  font-size: 15px;
+  margin-top: 5px;
+}
+
+.popup-total span:first-child {
+  color: #00ffff;
+}
+
+.popup-total span:last-child {
+  color: #00ffff;
+}
+
+/* Animation for popup appearance */
+@keyframes popupSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .price-breakdown-popup {
+    left: 0;
+    right: 0;
+    transform: none;
+    margin: 10px 20px 0 20px;
+    width: auto;
+  }
+  
+  .price-breakdown-popup::before,
+  .price-breakdown-popup::after {
+    left: 30px;
+  }
+
+  .text-muted {
+    color: rgb(235 235 235 / 75%) !important;
+}
+}

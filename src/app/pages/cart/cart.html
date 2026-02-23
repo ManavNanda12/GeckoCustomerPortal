@@ -159,13 +159,39 @@
         </div>
       </div>
 
-      <div class="mt-3 payment-section">
-        <label class="payment-label">Card Details</label>
-        <div id="card-element" class="stripe-card-element"></div>
-        <div id="card-errors" class="text-danger mt-1" role="alert"></div>
+      <!-- Payment Section -->
+      <div class="mt-4 payment-section">
+        <label class="payment-label mb-3">Payment Method</label>
+
+        <!-- Google Pay / Apple Pay Button (shows if available) -->
+        <div *ngIf="canMakePayment" class="payment-request-section mb-3">
+          <div id="payment-request-button" class="payment-request-button-wrapper"></div>
+          <div class="payment-divider">
+            <span>OR PAY WITH CARD</span>
+          </div>
+        </div>
+
+        <!-- Card Details -->
+        <div class="card-payment-section">
+          <label class="card-label">Card Details</label>
+          <div id="card-element" class="stripe-card-element"></div>
+          <div id="card-errors" class="text-danger mt-1" role="alert"></div>
+          
+          <button 
+            class="btn btn-animated-info mt-3 w-100" 
+            (click)="createPayment()" 
+            [disabled]="getIsOutOfStock()"
+          >
+            Pay with Card - ${{ discountedTotalAmount | number : '1.2-2' }}
+          </button>
+        </div>
       </div>
 
-      <button class="btn btn-animated-info mt-3" (click)="createPayment()" [disabled]="getIsOutOfStock()">Proceed to Checkout</button>
+      <!-- Security Badge -->
+      <div class="security-badge mt-3 text-center">
+        <i class="fa-solid fa-lock"></i>
+        <small class="text-muted ms-2">Secure payment powered by Stripe</small>
+      </div>
     </div>
   </div>
   
@@ -177,4 +203,3 @@
       <p>Your order has been placed successfully.</p>
     </div>
   </div>
-  

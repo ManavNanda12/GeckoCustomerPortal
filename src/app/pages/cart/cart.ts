@@ -29,13 +29,18 @@ export class Cart implements OnInit, OnDestroy {
   couponDiscount: number = 0;
   totalAmount: number = 0;
   discountedTotalAmount: any = 0;
-  stripePromise = loadStripe(environment.stripePublishKey); // Your publishable key
+  stripePromise = loadStripe(environment.stripePublishKey);
   stripe: any;
   elements: any;
   card: any;
-  cardComplete: boolean = false; // Track if card details are complete
+  cardComplete: boolean = false;
   taxAmount: number = 0;
-  showPriceBreakdown:boolean=false;
+  showPriceBreakdown: boolean = false;
+  
+  // Payment Request (Google Pay / Apple Pay)
+  paymentRequest: any;
+  paymentRequestButton: any;
+  canMakePayment: boolean = false;
 
   constructor(
     private readonly common: Common,
@@ -56,6 +61,8 @@ export class Cart implements OnInit, OnDestroy {
     try {
       this.stripe = await this.stripePromise;
       this.elements = this.stripe.elements();
+      
+      // Initialize regular card element
       this.card = this.elements.create('card', {
         style: {
           base: {
@@ -85,80 +92,247 @@ export class Cart implements OnInit, OnDestroy {
             if (displayError) {
               displayError.textContent = event.error ? event.error.message : '';
             }
-            // Track if card is complete and valid
             this.cardComplete = event.complete;
           });
         }
       }, 100);
+
+      // Initialize Payment Request Button (Google Pay / Apple Pay)
+      await this.initializePaymentRequest();
     } catch (error) {
       console.error('Failed to initialize Stripe:', error);
       this.toastr.error('Failed to load payment system');
     }
   }
 
-  getCartDetails() {
-    this.spinner.show();
-    let requestedModel = {
-      sessionId: this.common.getSessionId(),
-      customerId: this.customerId,
-    };
-    this.common
-      .postData(this.api.Cart.GetCartDetails, requestedModel)
-      .pipe()
-      .subscribe({
-        next: (res) => {
-          this.cartId = res.data[0]?.cartId;
-          this.cartItems = res.data;
-          // Mark out-of-stock items for UI
-          this.cartItems.forEach((item) => {
-            if (
-              item.isQuantityAvailable === false ||
-              item.stockStatus === 'INSUFFICIENT_STOCK' ||
-              (item.maxAvailableQuantity !== undefined &&
-                item.quantity > item.maxAvailableQuantity)
-            ) {
-              item.outOfStock = true;
-              item.availableQty =
-                item.maxAvailableQuantity ||
-                item.availableQuantity ||
-                item.stockQuantity ||
-                0;
-            } else {
-              item.outOfStock = false;
-              item.availableQty = null;
-            }
-          });
-          this.common.setCartProductCount(this.cartItems.length);
-          if (
-            this.cartItems[0]?.cartId > 0 &&
-            this.customerId > 0 &&
-            this.cartItems.length > 0 &&
-            this.cartItems[0]?.customerId == 0
-          ) {
-            this.updateCartCustomerId();
-          }
-          this.totalAmount = this.cartItems[0].subTotal;
-          this.discountedTotalAmount = this.totalAmount - this.couponDiscount;
-          if (this.cartItems[0]?.couponCode) {
-            this.couponResponse = {
-              success: true,
-              message: 'Coupon already applied',
-            };
-            this.couponCode = this.cartItems[0].couponCode;
-            this.couponDiscount = this.cartItems[0].discountAmount;
-            this.taxAmount = (res.data[0]?.subTotal - this.couponDiscount) * res.data[0]?.taxPercentage;
-            this.discountedTotalAmount = (this.totalAmount - this.couponDiscount) + this.taxAmount;
+  async initializePaymentRequest(): Promise<void> {
+    if (!this.stripe) return;
 
-          }
-        },
-        error: (err: any) => {
-          this.toastr.error('Failed to fetch cart details');
-        },
-        complete: () => {
-          this.spinner.hide();
+    // Create payment request
+    this.paymentRequest = this.stripe.paymentRequest({
+      country: 'US', // Change to your country code
+      currency: 'usd',
+      total: {
+        label: 'Total',
+        amount: Math.round(this.discountedTotalAmount * 100), // Amount in cents
+      },
+      requestPayerName: true,
+      requestPayerEmail: true,
+    });
+
+    // Check if browser supports Google Pay or Apple Pay
+    const canMakePaymentResult = await this.paymentRequest.canMakePayment();
+    
+    if (canMakePaymentResult) {
+      this.canMakePayment = true;
+      
+      // Create Payment Request Button element
+      this.paymentRequestButton = this.elements.create('paymentRequestButton', {
+        paymentRequest: this.paymentRequest,
+        style: {
+          paymentRequestButton: {
+            type: 'default', // 'default' | 'book' | 'buy' | 'donate'
+            theme: 'dark', // 'dark' | 'light' | 'light-outline'
+            height: '48px',
+          },
         },
       });
+
+      // Mount the Payment Request Button
+      setTimeout(() => {
+        const prButtonElement = document.getElementById('payment-request-button');
+        if (prButtonElement) {
+          this.paymentRequestButton.mount('#payment-request-button');
+        }
+      }, 200);
+
+      // Handle payment method event
+      this.paymentRequest.on('paymentmethod', async (event: any) => {
+        this.spinner.show();
+        
+        try {
+          // Create payment intent
+          const apiUrl = this.api.Payment.CreatePaymentIntent;
+          const requestedModel = {
+            Amount: parseInt(this.discountedTotalAmount)
+          };
+          
+          this.common.postData(apiUrl, requestedModel).subscribe({
+            next: async (response) => {
+              if (response.success) {
+                const clientSecret = response.data;
+
+                // Confirm the payment with the payment method from Google/Apple Pay
+                const { error: confirmError, paymentIntent } = await this.stripe.confirmCardPayment(
+                  clientSecret,
+                  { payment_method: event.paymentMethod.id },
+                  { handleActions: false }
+                );
+
+                if (confirmError) {
+                  // Report to the browser that the payment failed
+                  event.complete('fail');
+                  this.toastr.error(confirmError.message || 'Payment failed');
+                  this.spinner.hide();
+                } else {
+                  // Report to the browser that the payment was successful
+                  event.complete('success');
+                  
+                  if (paymentIntent.status === 'requires_action') {
+                    // Let Stripe.js handle the next actions
+                    const { error } = await this.stripe.confirmCardPayment(clientSecret);
+                    if (error) {
+                      this.toastr.error(error.message || 'Payment failed');
+                      this.spinner.hide();
+                    } else {
+                      // Payment succeeded
+                      this.checkout();
+                    }
+                  } else {
+                    // Payment succeeded
+                    this.checkout();
+                  }
+                }
+              } else {
+                event.complete('fail');
+                this.toastr.error('Please try again later');
+                this.spinner.hide();
+              }
+            },
+            error: (err: any) => {
+              event.complete('fail');
+              this.toastr.error('Payment initiation failed');
+              this.spinner.hide();
+            }
+          });
+        } catch (error) {
+          event.complete('fail');
+          console.error('Payment error:', error);
+          this.toastr.error('Payment processing failed');
+          this.spinner.hide();
+        }
+      });
+    } else {
+      this.canMakePayment = false;
+      console.log('Google Pay / Apple Pay not available');
+    }
   }
+
+  // Update payment request amount when cart changes
+  updatePaymentRequestAmount(): void {
+    if (this.paymentRequest && this.canMakePayment) {
+      this.paymentRequest.update({
+        total: {
+          label: 'Total',
+          amount: Math.round(this.discountedTotalAmount * 100),
+        },
+      });
+    }
+  }
+
+  getCartDetails() {
+  this.spinner.show();
+
+  const requestedModel = {
+    sessionId: this.common.getSessionId(),
+    customerId: this.customerId,
+  };
+
+  this.common
+    .postData(this.api.Cart.GetCartDetails, requestedModel)
+    .subscribe({
+      next: (res) => {
+        const data = res?.data || [];
+
+        if (!data.length) {
+          this.cartItems = [];
+          this.totalAmount = 0;
+          this.discountedTotalAmount = 0;
+          this.taxAmount = 0;
+          this.couponDiscount = 0;
+          this.common.setCartProductCount(0);
+          return;
+        }
+
+        this.cartItems = data;
+        const cartSummary = data[0];
+
+        this.cartId = cartSummary?.cartId;
+
+        // 🔹 Mark out-of-stock items
+        this.cartItems.forEach((item) => {
+          const isOutOfStock =
+            item.isQuantityAvailable === false ||
+            item.stockStatus === 'INSUFFICIENT_STOCK' ||
+            (item.maxAvailableQuantity !== undefined &&
+              item.quantity > item.maxAvailableQuantity);
+
+          item.outOfStock = isOutOfStock;
+
+          item.availableQty = isOutOfStock
+            ? item.maxAvailableQuantity ||
+              item.availableQuantity ||
+              item.stockQuantity ||
+              0
+            : null;
+        });
+
+        this.common.setCartProductCount(this.cartItems.length);
+
+        // 🔹 Update cart customer ID if needed
+        if (
+          cartSummary?.cartId > 0 &&
+          this.customerId > 0 &&
+          this.cartItems.length > 0 &&
+          cartSummary?.customerId == 0
+        ) {
+          this.updateCartCustomerId();
+        }
+
+        // =============================
+        // 💰 Pricing Calculation Section
+        // =============================
+
+        this.totalAmount = cartSummary?.subTotal || 0;
+
+        this.couponCode = cartSummary?.couponCode || null;
+        this.couponDiscount = cartSummary?.discountAmount || 0;
+
+        if (this.couponCode) {
+          this.couponResponse = {
+            success: true,
+            message: 'Coupon already applied',
+          };
+        } else {
+          this.couponResponse = null;
+        }
+
+        // Ensure discount does not exceed subtotal
+        const safeDiscount = Math.min(
+          this.couponDiscount,
+          this.totalAmount
+        );
+
+        const taxableAmount = this.totalAmount - safeDiscount;
+
+        this.taxAmount =
+          taxableAmount * (cartSummary?.taxPercentage || 0);
+
+        this.discountedTotalAmount = taxableAmount + this.taxAmount;
+
+        // 🔹 Update Payment Request amount
+        this.updatePaymentRequestAmount();
+      },
+
+      error: () => {
+        this.toastr.error('Failed to fetch cart details');
+      },
+
+      complete: () => {
+        this.spinner.hide();
+      },
+    });
+}
 
   increaseQuantity(item: any) {
     item.quantity++;
@@ -224,7 +398,7 @@ export class Cart implements OnInit, OnDestroy {
       customerId: this.customerId,
       billingAddress: 'Jam',
       shippingAddress: 'Jam',
-      paymentMethod: 'Cash On Delivery',
+      paymentMethod: 'Card Payment',
       shippingSameAsBilling: true,
       orderNotes: '',
     };
