@@ -1,76 +1,76 @@
 <header class="app-header">
-  <div class="header-container">
-    <button class="hamburger-btn" type="button" (click)="toggleMobileMenu()">
-      <span class="hamburger-line"></span>
-      <span class="hamburger-line"></span>
-      <span class="hamburger-line"></span>
-    </button>
 
-    <nav class="nav-bar desktop-nav">
+  <div class="header-container">
+
+    <nav class="nav-bar">
+
       <ul class="nav-links">
+
         <li>
+
           <a routerLink="/home"  class="nav-link-cyan"  routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+
             Home
+
           </a>
+
         </li>
+
         <li>
+
           <a routerLink="/category" class="nav-link-cyan" routerLinkActive="active">Categories</a>
+
         </li>
+
         <li>
+
           <a routerLink="/products" class="nav-link-cyan" routerLinkActive="active">Products</a>
+
         </li>
+
         <li>
+
           <a routerLink="/contact" class="nav-link-cyan" routerLinkActive="active">Contact</a>
+
         </li>
+
       </ul>
+
     </nav>
+
     <div class="cart-icon" >
+
       <a routerLink="/cart" class="icon-btn-cyan"  routerLinkActive="active">
+
         <i class="fa-solid fa-cart-shopping"></i>
+
         <span>{{cartItems}}</span>
+
       </a>
+
     </div>
+
     <div class="profile-icon mx-2" *ngIf="isLoggedIn">
+
       <a routerLink="/profile" class="icon-btn-cyan" routerLinkActive="active">
+
         <i class="fa-solid fa-user"></i>
+
       </a>
+
     </div>
+
     <div class="profile-icon mx-2" *ngIf="!isLoggedIn">
+
       <a routerLink="/login" class="icon-btn-cyan" routerLinkActive="active">
+
         <i class="fa-solid fa-right-to-bracket"></i>
+
       </a>
+
     </div>
+
   </div>
 
-  <div class="mobile-menu-backdrop" *ngIf="isMobileMenuOpen" (click)="toggleMobileMenu()"></div>
-
-  <nav class="mobile-menu" [class.open]="isMobileMenuOpen">
-    <ul class="mobile-nav-links">
-      <li>
-        <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="toggleMobileMenu()">
-          Home
-        </a>
-      </li>
-      <li>
-        <a routerLink="/category" routerLinkActive="active" (click)="toggleMobileMenu()">Categories</a>
-      </li>
-      <li>
-        <a routerLink="/products" routerLinkActive="active" (click)="toggleMobileMenu()">Products</a>
-      </li>
-      <li>
-        <a routerLink="/contact" routerLinkActive="active" (click)="toggleMobileMenu()">Contact</a>
-      </li>
-      <li *ngIf="isLoggedIn">
-        <a routerLink="/profile" routerLinkActive="active" (click)="toggleMobileMenu()">Profile</a>
-      </li>
-      <li *ngIf="!isLoggedIn">
-        <a routerLink="/login" routerLinkActive="active" (click)="toggleMobileMenu()">Login</a>
-      </li>
-      <li>
-        <a routerLink="/cart" routerLinkActive="active" (click)="toggleMobileMenu()">
-          Cart ({{cartItems}})
-        </a>
-      </li>
-    </ul>
-  </nav>
 </header>
+

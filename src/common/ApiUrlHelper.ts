@@ -56,4 +56,7 @@ export class ApiUrlHelper {
     GetStateList:'general/get-state-list/{CountryId}',
     GetCityList:'general/get-city-list/{StateId}'
   }
+  Payment = {
+    CreatePaymentIntent:'payment/create-payment-intent'
+  }
 }

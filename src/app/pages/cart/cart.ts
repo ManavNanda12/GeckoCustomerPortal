@@ -7,85 +7,157 @@ import { ApiUrlHelper } from '../../../common/ApiUrlHelper';
 import { CommonModule } from '@angular/common';
 import { gymImages } from '../../../common/models/CommonInterfaces';
 import { FormsModule } from '@angular/forms';
+import { loadStripe } from '@stripe/stripe-js';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-cart',
-  imports: [CommonModule,RouterModule,FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './cart.html',
-  styleUrl: './cart.css'
+  styleUrl: './cart.css',
 })
 export class Cart implements OnInit, OnDestroy {
-
   // Common Properties
   cartItems: any[] = [];
   showCelebration: boolean = false;
   private animationFrame: any;
-  customerId: number =0;
-  cartId: number =0;
+  customerId: number = 0;
+  cartId: number = 0;
   outOfStockItems: any[] = [];
-  couponCode: string = "";
+  couponCode: string = '';
   couponResponse: any;
-  couponDiscount: number = 0; 
+  couponDiscount: number = 0;
   totalAmount: number = 0;
-  discountedTotalAmount: number = 0;
+  discountedTotalAmount: any = 0;
+  stripePromise = loadStripe(environment.stripePublishKey); // Your publishable key
+  stripe: any;
+  elements: any;
+  card: any;
+  cardComplete: boolean = false; // Track if card details are complete
+  taxAmount: number = 0;
+  showPriceBreakdown:boolean=false;
 
   constructor(
     private readonly common: Common,
     private readonly spinner: NgxSpinnerService,
     private readonly toastr: ToastrService,
-    private readonly router:Router,
+    private readonly router: Router,
     private readonly api: ApiUrlHelper,
-    private readonly ngZone: NgZone
-  ) {
-   }
+    private readonly ngZone: NgZone,
+  ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.customerId = Number(localStorage.getItem('CustomerId')) || 0;
     this.getCartDetails();
+    await this.initializeStripe();
   }
 
-  getCartDetails(){
-    this.spinner.show();
-    let requestedModel ={
-      sessionId: this.common.getSessionId(),
-      customerId: this.customerId
-    }
-    this.common.postData(this.api.Cart.GetCartDetails,requestedModel).pipe().subscribe({
-      next: (res) => {
-        this.cartId = res.data[0]?.cartId;
-        this.cartItems = res.data;
-        // Mark out-of-stock items for UI
-        this.cartItems.forEach(item => {
-          if (
-            item.isQuantityAvailable === false ||
-            item.stockStatus === 'INSUFFICIENT_STOCK' ||
-            (item.maxAvailableQuantity !== undefined && item.quantity > item.maxAvailableQuantity)
-          ) {
-            item.outOfStock = true;
-            item.availableQty = item.maxAvailableQuantity || item.availableQuantity || item.stockQuantity || 0;
-          } else {
-            item.outOfStock = false;
-            item.availableQty = null;
-          }
-        });
-        this.common.setCartProductCount(this.cartItems.length);
-        if(this.cartItems[0]?.cartId > 0 && this.customerId > 0 && this.cartItems.length > 0 && this.cartItems[0]?.customerId == 0){
-          this.updateCartCustomerId();
+  async initializeStripe(): Promise<void> {
+    try {
+      this.stripe = await this.stripePromise;
+      this.elements = this.stripe.elements();
+      this.card = this.elements.create('card', {
+        style: {
+          base: {
+            color: '#ffffff',
+            iconColor: '#00ffff',
+            fontFamily: 'Poppins, system-ui, sans-serif',
+            fontSize: '16px',
+            '::placeholder': {
+              color: '#777777',
+            },
+          },
+          invalid: {
+            color: '#ff6b6b',
+            iconColor: '#ff6b6b',
+          },
+        },
+      });
+
+      // Wait for the DOM element to be ready before mounting
+      setTimeout(() => {
+        const cardElement = document.getElementById('card-element');
+        if (cardElement) {
+          this.card.mount('#card-element');
+
+          this.card.on('change', (event: any) => {
+            const displayError = document.getElementById('card-errors');
+            if (displayError) {
+              displayError.textContent = event.error ? event.error.message : '';
+            }
+            // Track if card is complete and valid
+            this.cardComplete = event.complete;
+          });
         }
+      }, 100);
+    } catch (error) {
+      console.error('Failed to initialize Stripe:', error);
+      this.toastr.error('Failed to load payment system');
+    }
+  }
+
+  getCartDetails() {
+    this.spinner.show();
+    let requestedModel = {
+      sessionId: this.common.getSessionId(),
+      customerId: this.customerId,
+    };
+    this.common
+      .postData(this.api.Cart.GetCartDetails, requestedModel)
+      .pipe()
+      .subscribe({
+        next: (res) => {
+          this.cartId = res.data[0]?.cartId;
+          this.cartItems = res.data;
+          // Mark out-of-stock items for UI
+          this.cartItems.forEach((item) => {
+            if (
+              item.isQuantityAvailable === false ||
+              item.stockStatus === 'INSUFFICIENT_STOCK' ||
+              (item.maxAvailableQuantity !== undefined &&
+                item.quantity > item.maxAvailableQuantity)
+            ) {
+              item.outOfStock = true;
+              item.availableQty =
+                item.maxAvailableQuantity ||
+                item.availableQuantity ||
+                item.stockQuantity ||
+                0;
+            } else {
+              item.outOfStock = false;
+              item.availableQty = null;
+            }
+          });
+          this.common.setCartProductCount(this.cartItems.length);
+          if (
+            this.cartItems[0]?.cartId > 0 &&
+            this.customerId > 0 &&
+            this.cartItems.length > 0 &&
+            this.cartItems[0]?.customerId == 0
+          ) {
+            this.updateCartCustomerId();
+          }
           this.totalAmount = this.cartItems[0].subTotal;
           this.discountedTotalAmount = this.totalAmount - this.couponDiscount;
-        if(this.cartItems[0]?.couponCode){
-          this.couponResponse = { success: true, message: "Coupon already applied" };
-          this.couponCode = this.cartItems[0].couponCode;
-          this.couponDiscount = this.cartItems[0].discountAmount;
-          this.discountedTotalAmount = this.totalAmount - this.couponDiscount;
-        }
-      },
-      error: (err: any) => {
-        this.toastr.error("Failed to fetch cart details");
-      },
-      complete: () => { this.spinner.hide(); }
-    })
+          if (this.cartItems[0]?.couponCode) {
+            this.couponResponse = {
+              success: true,
+              message: 'Coupon already applied',
+            };
+            this.couponCode = this.cartItems[0].couponCode;
+            this.couponDiscount = this.cartItems[0].discountAmount;
+            this.taxAmount = (res.data[0]?.subTotal - this.couponDiscount) * res.data[0]?.taxPercentage;
+            this.discountedTotalAmount = (this.totalAmount - this.couponDiscount) + this.taxAmount;
+
+          }
+        },
+        error: (err: any) => {
+          this.toastr.error('Failed to fetch cart details');
+        },
+        complete: () => {
+          this.spinner.hide();
+        },
+      });
   }
 
   increaseQuantity(item: any) {
@@ -93,13 +165,13 @@ export class Cart implements OnInit, OnDestroy {
     item.itemTotal = item.quantity * item.price;
     this.updateCart(item);
   }
-  
+
   decreaseQuantity(item: any) {
-      item.quantity--;
-      item.itemTotal = item.quantity * item.price;
-      this.updateCart(item);
+    item.quantity--;
+    item.itemTotal = item.quantity * item.price;
+    this.updateCart(item);
   }
-  
+
   getCartTotal() {
     return this.cartItems.reduce((acc, item) => acc + item.itemTotal, 0);
   }
@@ -113,91 +185,107 @@ export class Cart implements OnInit, OnDestroy {
       productId: item.productId,
       newQuantity: item.quantity,
       sessionId: this.common.getSessionId(),
-      customerId:this.customerId
-    }
-    this.common.postData(this.api.Cart.UpdateCartQuantity,updatedItem).pipe().subscribe({
-      next: (res) => {
-        if(res.success){
-          this.toastr.success(res.message);
-          this.getCartDetails();
-        }
-        else{
-          this.toastr.error(res.message);
-        }
-      },
-      error: (err: any) => {
-        this.toastr.error("Failed to update cart");
-      },
-      complete: () => { this.spinner.hide(); }
-    })
+      customerId: this.customerId,
+    };
+    this.common
+      .postData(this.api.Cart.UpdateCartQuantity, updatedItem)
+      .pipe()
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.toastr.success(res.message);
+            this.getCartDetails();
+          } else {
+            this.toastr.error(res.message);
+          }
+        },
+        error: (err: any) => {
+          this.toastr.error('Failed to update cart');
+        },
+        complete: () => {
+          this.spinner.hide();
+        },
+      });
   }
 
-  checkout(){
-    if(this.customerId == 0 || this.customerId == null){
-      this.toastr.error("Please login to checkout");
+  checkout() {
+    if (this.customerId == 0 || this.customerId == null) {
+      this.toastr.error('Please login to checkout');
       this.router.navigate(['/login']);
       return;
     }
-    if(this.outOfStockItems.length > 0){
-      this.toastr.error("Some items are out of stock");
+    if (this.outOfStockItems.length > 0) {
+      this.toastr.error('Some items are out of stock');
       return;
     }
     this.spinner.show();
-    let requestedModel ={
+    let requestedModel = {
       cartSessionId: this.common.getSessionId(),
-      customerId:this.customerId,
-      billingAddress:"Jam",
-      shippingAddress:"Jam",
-      paymentMethod:"Cash On Delivery",
-      shippingSameAsBilling:true,
-      orderNotes:""
-    }
-    this.common.postData(this.api.Order.CheckOut,requestedModel).pipe().subscribe({
-      next: (res) => {
-        console.log(res);
-        if(res.success){
-          this.showCelebration = true;
-          setTimeout(() => {
-            this.ngZone.runOutsideAngular(() => {
-              this.startFireworks();
-            });
-          }, 1000);
+      customerId: this.customerId,
+      billingAddress: 'Jam',
+      shippingAddress: 'Jam',
+      paymentMethod: 'Cash On Delivery',
+      shippingSameAsBilling: true,
+      orderNotes: '',
+    };
+    this.common
+      .postData(this.api.Order.CheckOut, requestedModel)
+      .pipe()
+      .subscribe({
+        next: (res) => {
+          console.log(res);
+          if (res.success) {
+            this.showCelebration = true;
+            setTimeout(() => {
+              this.ngZone.runOutsideAngular(() => {
+                this.startFireworks();
+              });
+            }, 1000);
 
-          setTimeout(() => {
-            this.showCelebration = false;
-            this.getCartDetails();
-            cancelAnimationFrame(this.animationFrame);
-            this.router.navigate(['/profile/orders']);
-          }, 5000);
-        }
-        else {
-          // Out of stock handling
-          if (res.data && res.data.outOfStockItems && res.data.outOfStockItems.length > 0) {
-            this.outOfStockItems = res.data.outOfStockItems;
-            // Mark cartItems with outOfStock flag
-            this.cartItems.forEach(item => {
-              const out = this.outOfStockItems.find((o: any) => o.productId === item.productId);
-              if (out) {
-                item.outOfStock = true;
-                item.availableQty = out.availableQty;
-              } else {
-                item.outOfStock = false;
-                item.availableQty = null;
-              }
-            });
+            setTimeout(() => {
+              this.showCelebration = false;
+              this.getCartDetails();
+              cancelAnimationFrame(this.animationFrame);
+              this.router.navigate(['/profile/orders']);
+            }, 5000);
+          } else {
+            // Out of stock handling
+            if (
+              res.data &&
+              res.data.outOfStockItems &&
+              res.data.outOfStockItems.length > 0
+            ) {
+              this.outOfStockItems = res.data.outOfStockItems;
+              // Mark cartItems with outOfStock flag
+              this.cartItems.forEach((item) => {
+                const out = this.outOfStockItems.find(
+                  (o: any) => o.productId === item.productId,
+                );
+                if (out) {
+                  item.outOfStock = true;
+                  item.availableQty = out.availableQty;
+                } else {
+                  item.outOfStock = false;
+                  item.availableQty = null;
+                }
+              });
+            }
+            this.toastr.error(res.message);
           }
-          this.toastr.error(res.message);
-        }
-      },
-      error: (err: any) => {
-        this.toastr.error("Failed to checkout");
-      },
-      complete: () => { this.spinner.hide(); }
-    })
+        },
+        error: (err: any) => {
+          this.toastr.error('Failed to checkout');
+        },
+        complete: () => {
+          this.spinner.hide();
+        },
+      });
   }
 
   startFireworks() {
-    const canvas = document.getElementById('fireworksCanvas') as HTMLCanvasElement;
+    const canvas = document.getElementById(
+      'fireworksCanvas',
+    ) as HTMLCanvasElement;
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d')!;
@@ -207,15 +295,23 @@ export class Cart implements OnInit, OnDestroy {
     const particles: any[] = [];
 
     const createFirework = (x: number, y: number) => {
-      const colors = ['#ff7675', '#74b9ff', '#55efc4', '#ffeaa7', '#fd79a8', '#a29bfe'];
+      const colors = [
+        '#ff7675',
+        '#74b9ff',
+        '#55efc4',
+        '#ffeaa7',
+        '#fd79a8',
+        '#a29bfe',
+      ];
       for (let i = 0; i < 80; i++) {
         particles.push({
-          x, y,
+          x,
+          y,
           angle: Math.random() * 2 * Math.PI,
           speed: Math.random() * 6 + 2,
           radius: 2,
           life: 80,
-          color: colors[Math.floor(Math.random() * colors.length)]
+          color: colors[Math.floor(Math.random() * colors.length)],
         });
       }
     };
@@ -248,7 +344,10 @@ export class Cart implements OnInit, OnDestroy {
         clearInterval(interval);
         return;
       }
-      createFirework(Math.random() * canvas.width, Math.random() * canvas.height * 0.5);
+      createFirework(
+        Math.random() * canvas.width,
+        Math.random() * canvas.height * 0.5,
+      );
     }, 600);
 
     render();
@@ -258,77 +357,161 @@ export class Cart implements OnInit, OnDestroy {
     cancelAnimationFrame(this.animationFrame);
   }
 
-  updateCartCustomerId(){
+  updateCartCustomerId() {
     this.spinner.show();
-    let requestedModel ={
+    let requestedModel = {
       cartId: this.cartId,
-      customerId:this.customerId
-    }
-    this.common.postData(this.api.Cart.UpdateCartCustomerId,requestedModel).pipe().subscribe({
-      next: (res) => {
-        this.toastr.success("Cart updated successfully");
-      },
-      error: (err: any) => {
-        this.toastr.error("Failed to update cart", "Error");
-      },
-      complete: () => { this.spinner.hide(); }
-    })
+      customerId: this.customerId,
+    };
+    this.common
+      .postData(this.api.Cart.UpdateCartCustomerId, requestedModel)
+      .pipe()
+      .subscribe({
+        next: (res) => {
+          this.toastr.success('Cart updated successfully');
+        },
+        error: (err: any) => {
+          this.toastr.error('Failed to update cart', 'Error');
+        },
+        complete: () => {
+          this.spinner.hide();
+        },
+      });
   }
 
-  getIsOutOfStock(){
-    return this.cartItems.some(item => item.isQuantityAvailable === false ||
-    item.stockStatus === 'INSUFFICIENT_STOCK' ||
-    (item.maxAvailableQuantity !== undefined && item.quantity > item.maxAvailableQuantity));
+  getIsOutOfStock() {
+    return this.cartItems.some(
+      (item) =>
+        item.isQuantityAvailable === false ||
+        item.stockStatus === 'INSUFFICIENT_STOCK' ||
+        (item.maxAvailableQuantity !== undefined &&
+          item.quantity > item.maxAvailableQuantity),
+    );
   }
 
   applyCoupon() {
-  if (!this.couponCode) return;
-  this.spinner.show();
-   let requestedModel ={
+    if (!this.couponCode) return;
+    this.spinner.show();
+    let requestedModel = {
       cartSessionId: this.common.getSessionId(),
-      couponCode: this.couponCode
+      couponCode: this.couponCode,
+    };
+    let api = this.api.Coupon.ApplyCoupon;
+    this.common
+      .postData(api, requestedModel)
+      .pipe()
+      .subscribe({
+        next: (res) => {
+          this.couponResponse = res;
+          if (res.success) {
+            this.toastr.success(res.message);
+            this.getCartDetails();
+          }
+        },
+        error: (err: any) => {
+          this.toastr.error('Failed to apply coupon', 'Error');
+        },
+        complete: () => {
+          this.spinner.hide();
+        },
+      });
+  }
+
+  removeCoupon() {
+    if (!this.couponCode) return;
+    this.spinner.show();
+    let requestedModel = {
+      cartSessionId: this.common.getSessionId(),
+    };
+    let api = this.api.Coupon.RemoveCoupon.replace(
+      '{CartSessionId}',
+      this.common.getSessionId(),
+    );
+    this.common
+      .postData(api, requestedModel)
+      .pipe()
+      .subscribe({
+        next: (res) => {
+          this.couponResponse = res;
+          if (res.success) {
+            this.toastr.success(res.message);
+            this.couponCode = '';
+            this.couponDiscount = 0;
+            this.couponResponse = {
+              success: null,
+              message: 'Coupon already applied',
+            };
+            this.getCartDetails();
+          }
+        },
+        error: (err: any) => {
+          this.toastr.error('Failed to remove coupon', 'Error');
+        },
+        complete: () => {
+          this.spinner.hide();
+        },
+      });
+  }
+
+  async createPayment() {
+    if (this.customerId == 0 || this.customerId == null) {
+      this.toastr.error('Please login to checkout');
+      this.router.navigate(['/login']);
+      return;
     }
-  let api = this.api.Coupon.ApplyCoupon;
-  this.common.postData(api, requestedModel).pipe().subscribe({
-    next: (res) => {
-      this.couponResponse = res;
-      if(res.success){
-        this.toastr.success(res.message);
-        this.getCartDetails();
-      }
-    },
-    error: (err: any) => {
-      this.toastr.error("Failed to apply coupon", "Error");
-    },
-    complete: () => { this.spinner.hide(); }
-  })
-}
+    if (this.outOfStockItems.length > 0) {
+      this.toastr.error('Some items are out of stock');
+      return;
+    }
 
-removeCoupon() {
-  if (!this.couponCode) return;
-  this.spinner.show();
-  let requestedModel = {
-    cartSessionId: this.common.getSessionId()
-  };
-  let api = this.api.Coupon.RemoveCoupon.replace('{CartSessionId}', this.common.getSessionId());
-  this.common.postData(api, requestedModel).pipe().subscribe({
-    next: (res) => {
-      this.couponResponse = res;
-      if(res.success){
-        this.toastr.success(res.message);
-        this.couponCode = '';
-        this.couponDiscount = 0;
-        this.couponResponse = { success: null, message: "Coupon already applied" };
-        this.getCartDetails();
-      }
-    },
-    error: (err: any) => {
-      this.toastr.error("Failed to remove coupon", "Error");
-    },
-    complete: () => { this.spinner.hide(); }
-  })
-}
+    // Validate card details before proceeding
+    if (!this.cardComplete) {
+      this.toastr.error('Please add valid card details to checkout');
+      return;
+    }
 
+    this.spinner.show();
+    let apiUrl = this.api.Payment.CreatePaymentIntent;
+    let requestedModel = {
+      Amount: parseInt(this.discountedTotalAmount)
+    };
+    this.common
+      .postData(apiUrl, requestedModel)
+      .pipe()
+      .subscribe({
+        next: async (response) => {
+          if (response.success) {
+            const clientSecret = response.data;
 
+            // Confirm card payment
+            const result = await this.stripe.confirmCardPayment(clientSecret, {
+              payment_method: {
+                card: this.card,
+                billing_details: {
+                  name: this.customerId.toString(),
+                },
+              },
+            });
 
+            if (result.error) {
+              console.log(result.error.message);
+              this.toastr.error(result.error.message || 'Payment failed');
+              this.spinner.hide();
+            } else {
+              if (result.paymentIntent.status === 'succeeded') {
+                // Call backend to verify + create order
+                this.checkout();
+              }
+            }
+          } else {
+            this.toastr.error('Please try again later');
+            this.spinner.hide();
+          }
+        },
+        error: (err: any) => {
+          this.toastr.error('Payment initiation failed');
+          this.spinner.hide();
+        },
+      });
+  }
 }

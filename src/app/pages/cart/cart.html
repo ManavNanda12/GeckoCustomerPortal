@@ -112,15 +112,60 @@
         </span>
       </div>
 
-      <!-- Show final total after discount -->
+         <!-- Tax Amount -->
       <h4 class="mt-3">
-        Final Total:
+        Tax Amount:
         <span class="text-highlight">
-          $ {{ discountedTotalAmount | number : '1.2-2' }}
+          $ {{ taxAmount | number : '1.2-2' }}
         </span>
       </h4>
 
-      <button class="btn btn-animated-info mt-3" (click)="checkout()" [disabled]="getIsOutOfStock()">Proceed to Checkout</button>
+ <!-- Show final total after discount with info icon -->
+      <div class="mt-3 position-relative d-flex align-items-center justify-content-center">
+        <h4>
+          <span>Final Total:</span>
+          <span class="text-highlight">
+            $ {{ discountedTotalAmount | number : '1.2-2' }}
+          </span>
+          <i 
+            class="fa-solid fa-info-circle price-info-icon"
+            (mouseenter)="showPriceBreakdown = true"
+            (mouseleave)="showPriceBreakdown = false"
+            (click)="showPriceBreakdown = !showPriceBreakdown"
+          ></i>
+        </h4>
+
+        <!-- Custom Tooltip/Popover -->
+        <div class="price-breakdown-popup" *ngIf="showPriceBreakdown">
+          <div class="popup-title"><strong>Price Breakdown</strong></div>
+          <hr>
+          <div class="popup-row">
+            <span>Subtotal:</span>
+            <span>${{ totalAmount | number : '1.2-2' }}</span>
+          </div>
+          <div class="popup-row text-success" *ngIf="couponDiscount > 0">
+            <span>Discount:</span>
+            <span>- ${{ couponDiscount | number : '1.2-2' }}</span>
+          </div>
+          <div class="popup-row" *ngIf="taxAmount > 0">
+            <span>Tax:</span>
+            <span>+ ${{ taxAmount | number : '1.2-2' }}</span>
+          </div>
+          <hr>
+          <div class="popup-row popup-total">
+            <span>Final Total:</span>
+            <span>${{ discountedTotalAmount | number : '1.2-2' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-3 payment-section">
+        <label class="payment-label">Card Details</label>
+        <div id="card-element" class="stripe-card-element"></div>
+        <div id="card-errors" class="text-danger mt-1" role="alert"></div>
+      </div>
+
+      <button class="btn btn-animated-info mt-3" (click)="createPayment()" [disabled]="getIsOutOfStock()">Proceed to Checkout</button>
     </div>
   </div>
   

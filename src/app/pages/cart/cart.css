@@ -127,7 +127,34 @@
     text-align: center;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
   }
-  
+
+  /* Stripe Payment Section */
+  .payment-section {
+    margin-top: 1rem;
+    text-align: left;
+  }
+
+  .payment-label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-weight: 600;
+    color: #00ffff;
+    font-size: 0.95rem;
+  }
+
+  .stripe-card-element {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(0, 255, 255, 0.4);
+    box-shadow: 0 0 12px rgba(0, 255, 255, 0.25);
+  }
+
+  .stripe-card-element.StripeElement--focus {
+    border-color: #00ffff;
+    box-shadow: 0 0 16px rgba(0, 255, 255, 0.5);
+  }
+
   .text-highlight {
     color: #ff6b6b;
     font-weight: bold;
@@ -437,4 +464,142 @@
 @keyframes fadeInText {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* Tool Tip */
+/* Price Info Icon Styling */
+.price-info-icon {
+  font-size: 18px;
+  color: #00ffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.price-info-icon:hover {
+  color: #00d4d4;
+  transform: scale(1.2);
+}
+
+/* Custom Price Breakdown Popup */
+.price-breakdown-popup {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 10px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #ffffff;
+  padding: 16px 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 255, 255, 0.4);
+  border: 2px solid #00ffff;
+  min-width: 280px;
+  z-index: 9999;
+  animation: popupSlideIn 0.3s ease;
+}
+
+/* Arrow for the popup */
+.price-breakdown-popup::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #00ffff;
+}
+
+.price-breakdown-popup::after {
+  content: '';
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid #1a1a2e;
+}
+
+.popup-title {
+  font-size: 15px;
+  margin-bottom: 8px;
+  color: #00ffff;
+  text-align: center;
+}
+
+.price-breakdown-popup hr {
+  margin: 10px 0;
+  border-color: rgba(0, 255, 255, 0.3);
+  opacity: 0.5;
+}
+
+.popup-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.popup-row span:first-child {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.popup-row span:last-child {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.popup-row.text-success span {
+  color: #55efc4 !important;
+  font-weight: 600;
+}
+
+.popup-total {
+  font-weight: bold;
+  font-size: 15px;
+  margin-top: 5px;
+}
+
+.popup-total span:first-child {
+  color: #00ffff;
+}
+
+.popup-total span:last-child {
+  color: #00ffff;
+}
+
+/* Animation for popup appearance */
+@keyframes popupSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .price-breakdown-popup {
+    left: 0;
+    right: 0;
+    transform: none;
+    margin: 10px 20px 0 20px;
+    width: auto;
+  }
+  
+  .price-breakdown-popup::before,
+  .price-breakdown-popup::after {
+    left: 30px;
+  }
 }
