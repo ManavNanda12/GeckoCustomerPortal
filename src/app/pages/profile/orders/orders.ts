@@ -15,29 +15,30 @@ import { Router } from '@angular/router';
 })
 export class Orders implements OnInit {
 
-  // Common Properties
-  orderList:any;
+  orderList: any;
 
-  constructor(private readonly api:ApiUrlHelper,
-    private readonly spinner:NgxSpinnerService,
-    private readonly common:Common,
+  constructor(
+    private readonly api: ApiUrlHelper,
+    private readonly spinner: NgxSpinnerService,
+    private readonly common: Common,
     private readonly dialog: MatDialog,
-    private readonly router: Router){}
+    private readonly router: Router
+  ) {}
 
   ngOnInit(): void {
     this.getOrders();
   }
 
-  getOrders(){
+  getOrders() {
     this.spinner.show();
-    let api = this.api.Order.GetOrderList.replace('{customerId}',localStorage.getItem('CustomerId') || '0');
+    let api = this.api.Order.GetOrderList.replace('{customerId}', localStorage.getItem('CustomerId') || '0');
     this.common.getData(api).pipe().subscribe({
-      next:(response)=>{
-        if(response.success){
+      next: (response) => {
+        if (response.success) {
           const result = Object.values(
-            response.data.reduce((acc:any, curr:any) => {
+            response.data.reduce((acc: any, curr: any) => {
               if (!acc[curr.id]) {
-                acc[curr.id] = {   ...curr, itemCount: 0 };
+                acc[curr.id] = { ...curr, itemCount: 0 };
               }
               acc[curr.id].itemCount += 1;
               return acc;
@@ -46,51 +47,97 @@ export class Orders implements OnInit {
           this.orderList = result;
         }
       },
-      error:(error)=>{
+      error: (error) => {
         console.log(error);
       },
-      complete:()=>{
+      complete: () => {
         this.spinner.hide();
       }
-    })
+    });
   }
 
-  getStatusClass(status: any): string {
-    let statusClass = '';
-    if(status == 1){
-      statusClass = 'pending';
-    }else if(status == 2){
-      statusClass = 'processing';
-    }else if(status == 3){
-      statusClass = 'shipped';
-    }else if(status == 4){
-      statusClass = 'delivered';
-    }else if(status == 5){
-      statusClass = 'cancelled';
-    }
-    return statusClass.toLowerCase().replace(' ', '-');
-  }
-  
-  getStatusIcon(status: any): any {
-    const icons: any = {
-      1: 'fa-regular fa-clock', 
-      2: 'fa-solid fa-gear',         
-      3: 'fa-solid fa-truck',        
-      4: 'fa-solid fa-circle-check',  
-      5: 'fa-solid fa-circle-xmark'   
+  // Order Status Methods
+  getStatusClass(status: number): string {
+    const statusMap: any = {
+      1: 'pending',
+      2: 'processing',
+      3: 'shipped',
+      4: 'delivered',
+      5: 'cancelled'
     };
-    return icons[status] || 'fa-regular fa-circle';
+    return statusMap[status] || 'pending';
   }
   
+  getStatusIcon(status: number): string {
+    const icons: any = {
+      1: 'fa-regular fa-clock',           // Pending
+      2: 'fa-solid fa-gears',             // Processing
+      3: 'fa-solid fa-truck',             // Shipped
+      4: 'fa-solid fa-circle-check',      // Delivered
+      5: 'fa-solid fa-circle-xmark'       // Cancelled
+    };
+    return icons[status] || 'fa-regular fa-clock';
+  }
+
+  getStatusText(status: number): string {
+    const textMap: any = {
+      1: 'Pending',
+      2: 'Processing',
+      3: 'Shipped',
+      4: 'Delivered',
+      5: 'Cancelled'
+    };
+    return textMap[status] || 'Pending';
+  }
+
+  // Payment Status Methods
+  getPaymentStatusClass(paymentStatus: number): string {
+    const statusMap: any = {
+      0: 'payment-pending',
+      1: 'payment-succeeded',
+      2: 'payment-failed',
+      3: 'payment-canceled'
+    };
+    return statusMap[paymentStatus] || 'payment-pending';
+  }
+
+  getPaymentBadgeClass(paymentStatus: number): string {
+    const statusMap: any = {
+      0: 'pending',
+      1: 'succeeded',
+      2: 'failed',
+      3: 'canceled'
+    };
+    return statusMap[paymentStatus] || 'pending';
+  }
+
+  getPaymentStatusIcon(paymentStatus: number): string {
+    const icons: any = {
+      0: 'fa-solid fa-hourglass-half',      // Pending
+      1: 'fa-solid fa-circle-check',        // Succeeded/Paid
+      2: 'fa-solid fa-circle-xmark',        // Failed
+      3: 'fa-solid fa-ban'                  // Canceled
+    };
+    return icons[paymentStatus] || 'fa-solid fa-hourglass-half';
+  }
+
+  getPaymentStatusText(paymentStatus: number): string {
+    const textMap: any = {
+      0: 'Payment Pending',
+      1: 'Paid',
+      2: 'Payment Failed',
+      3: 'Cancelled'
+    };
+    return textMap[paymentStatus] || 'Pending';
+  }
   
   navigateToOrderDetail(orderId: number): void {
-     this.dialog.open(OrderDetail, {
-        data: { orderId: orderId },
-         maxWidth: '100vw',
-        width: 'auto',
-        disableClose:true
-        
-      });
+    this.dialog.open(OrderDetail, {
+      data: { orderId: orderId },
+      maxWidth: '100vw',
+      width: 'auto',
+      disableClose: true
+    });
   }
   
   navigateToProducts(): void {

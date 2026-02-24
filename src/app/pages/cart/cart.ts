@@ -233,11 +233,11 @@ async initializeStripe(): Promise<void> {
                       this.spinner.hide();
                     } else {
                       // Payment succeeded
-                      this.checkout();
+                      this.checkout(paymentIntent.status,paymentIntent.id);
                     }
                   } else {
                     // Payment succeeded
-                    this.checkout();
+                    this.checkout(paymentIntent.status,paymentIntent.id);
                   }
                 }
               } else {
@@ -431,7 +431,7 @@ async initializeStripe(): Promise<void> {
       });
   }
 
-  checkout() {
+  checkout(status:any,paymentIntentId:any) {
     if (this.customerId == 0 || this.customerId == null) {
       this.toastr.error('Please login to checkout');
       this.router.navigate(['/login']);
@@ -450,6 +450,8 @@ async initializeStripe(): Promise<void> {
       paymentMethod: 'Card Payment',
       shippingSameAsBilling: true,
       orderNotes: '',
+      stripePaymentStatus: status,
+      paymentIntentId: paymentIntentId
     };
     this.common
       .postData(this.api.Order.CheckOut, requestedModel)
@@ -721,10 +723,10 @@ async initializeStripe(): Promise<void> {
               this.toastr.error(result.error.message || 'Payment failed');
               this.spinner.hide();
             } else {
-              if (result.paymentIntent.status === 'succeeded') {
-                // Call backend to verify + create order
-                this.checkout();
-              }
+              // if (result.paymentIntent.status === 'succeeded') {
+              //   // Call backend to verify + create order
+                this.checkout(result.paymentIntent.status,result.paymentIntent.id);
+              // }
             }
           } else {
             this.toastr.error('Please try again later');
