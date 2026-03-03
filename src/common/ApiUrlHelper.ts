@@ -57,6 +57,13 @@ export class ApiUrlHelper {
     GetCityList:'general/get-city-list/{StateId}'
   }
   Payment = {
-    CreatePaymentIntent:'payment/create-payment-intent'
+    CreatePaymentIntent:'payment/create-payment-intent',
+    CreateSubscription:'payment/create-checkout-session',
+    ChangePlan:'payment/change-plan',
+    CancelSubscription:'payment/cancel-subscription'
+  }
+  Plan = {
+    GetPlanList:'plan/get-plan-list/{customerId}',
+    CheckPlan:'plan/check-plan'
   }
 }

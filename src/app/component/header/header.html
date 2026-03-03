@@ -1,76 +1,74 @@
 <header class="app-header">
-
   <div class="header-container">
-
     <nav class="nav-bar">
-
       <ul class="nav-links">
-
         <li>
-
-          <a routerLink="/home"  class="nav-link-cyan"  routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-
+          <a
+            routerLink="/home"
+            class="nav-link-cyan"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
             Home
-
           </a>
-
         </li>
 
         <li>
-
-          <a routerLink="/category" class="nav-link-cyan" routerLinkActive="active">Categories</a>
-
+          <a
+            routerLink="/category"
+            class="nav-link-cyan"
+            routerLinkActive="active"
+            >Categories</a
+          >
         </li>
 
         <li>
-
-          <a routerLink="/products" class="nav-link-cyan" routerLinkActive="active">Products</a>
-
+          <a
+            routerLink="/products"
+            class="nav-link-cyan"
+            routerLinkActive="active"
+            >Products</a
+          >
         </li>
 
         <li>
-
-          <a routerLink="/contact" class="nav-link-cyan" routerLinkActive="active">Contact</a>
-
+          <a
+            routerLink="/contact"
+            class="nav-link-cyan"
+            routerLinkActive="active"
+            >Contact</a
+          >
         </li>
 
+          <li>
+          <a
+            routerLink="/subscriptions"
+            class="nav-link-cyan"
+            routerLinkActive="active"
+            >Subscriptions</a
+          >
+        </li>
       </ul>
-
     </nav>
 
-    <div class="cart-icon" >
-
-      <a routerLink="/cart" class="icon-btn-cyan"  routerLinkActive="active">
-
+    <div class="cart-icon">
+      <a routerLink="/cart" class="icon-btn-cyan" routerLinkActive="active">
         <i class="fa-solid fa-cart-shopping"></i>
 
         <span>{{cartItems}}</span>
-
       </a>
-
     </div>
 
     <div class="profile-icon mx-2" *ngIf="isLoggedIn">
-
       <a routerLink="/profile" class="icon-btn-cyan" routerLinkActive="active">
-
         <i class="fa-solid fa-user"></i>
-
       </a>
-
     </div>
 
     <div class="profile-icon mx-2" *ngIf="!isLoggedIn">
-
       <a routerLink="/login" class="icon-btn-cyan" routerLinkActive="active">
-
         <i class="fa-solid fa-right-to-bracket"></i>
-
       </a>
-
     </div>
-
   </div>
-
 </header>
-

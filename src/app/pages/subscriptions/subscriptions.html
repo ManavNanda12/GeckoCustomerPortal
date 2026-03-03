@@ -1,0 +1,182 @@
+<div class="subscriptions-container">
+  <!-- Header Section -->
+  <div class="subscriptions-header">
+    <h1 class="main-title">
+      <i class="fa-solid fa-crown"></i>
+      Choose Your Plan
+    </h1>
+    <p class="subtitle">
+      Unlock exclusive benefits and save more on every purchase
+    </p>
+    <div class="header-line"></div>
+  </div>
+
+  <div class="plans-grid">
+    <div
+      class="plan-card"
+      *ngFor="let plan of planList"
+      [ngClass]="{
+          'active': isActive(plan),
+          'free-card': plan.planName.includes('Free'),
+          'pro-card': plan.planName.includes('Pro'),
+          'super-card': plan.planName.includes('Super')
+       }"
+    >
+      <!-- Badge -->
+      <div class="popular-badge" *ngIf="plan.planName.includes('Pro')">
+        <i class="fa-solid fa-star"></i>
+        Popular
+      </div>
+
+      <div class="premium-badge" *ngIf="plan.planName.includes('Super')">
+        <i class="fa-solid fa-gem"></i>
+        Best Value
+      </div>
+
+      <!-- Header -->
+      <div class="plan-header">
+        <div
+          class="plan-icon"
+          [ngClass]="{
+             'free-icon': plan.planName.includes('Free'),
+             'pro-icon': plan.planName.includes('Pro'),
+             'super-icon': plan.planName.includes('Super')
+           }"
+        >
+          <i
+            class="fa-solid"
+            [ngClass]="{
+             'fa-gift': plan.planName.includes('Free'),
+             'fa-rocket': plan.planName.includes('Pro'),
+             'fa-crown': plan.planName.includes('Super')
+           }"
+          >
+          </i>
+        </div>
+
+        <h2 class="plan-name">{{ plan.planName }}</h2>
+
+        <div class="plan-badge" *ngIf="isActive(plan)">
+          <i class="fa-solid fa-check"></i>
+          Current Plan
+        </div>
+
+        <!-- Active plan period + status info -->
+        <div *ngIf="!plan.planName.includes('Free')">
+          <div
+            class="plan-period-info"
+            *ngIf="getCurrentPeriodText(plan) as periodText"
+          >
+            <i class="fa-regular fa-calendar"></i>
+            <span class="period-text">{{ periodText }}</span>
+          </div>
+        </div>
+
+        <div class="cancel-warning" *ngIf="isCancelledAtPeriodEnd(plan)">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span>This subscription will not renew after this period.</span>
+        </div>
+      </div>
+
+      <!-- Price -->
+      <div class="plan-price">
+        <span class="currency">{{plan.currency === 'INR' ? '₹' : '£'}}</span>
+        <span class="amount">{{plan.amount}}</span>
+        <span class="period">/{{plan.billingInterval}}</span>
+      </div>
+
+      <!-- Description -->
+      <div class="plan-description">{{plan.planDescription}}</div>
+
+      <!-- Benefits -->
+      <div class="plan-benefits">
+        <div class="benefit-item" *ngFor="let b of plan.benefits">
+          <i
+            class="fa-solid"
+            [ngClass]="
+             (b.BenefitKey === 'discount_percent' && b.BenefitValue !== '0') ||
+             (b.BenefitValue === 'true')
+             ? 'fa-circle-check benefit-icon'
+             : 'fa-circle-xmark benefit-icon disabled'
+           "
+          >
+          </i>
+
+          <span
+            class="benefit-text"
+            [ngClass]="{
+                'disabled':
+                (b.BenefitKey === 'discount_percent' && b.BenefitValue === '0') ||
+                (b.BenefitValue === 'false')
+              }"
+          >
+            <ng-container [ngSwitch]="b.BenefitKey">
+              <ng-container *ngSwitchCase="'discount_percent'">
+                {{b.BenefitValue}}% OFF All Products
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'free_shipping'">
+                {{b.BenefitValue === 'true' ? 'Free Shipping Always' : 'Standard
+                Shipping'}}
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'early_access'">
+                {{b.BenefitValue === 'true' ? 'Early Buy-In Access' : 'No Early
+                Access'}}
+              </ng-container>
+            </ng-container>
+          </span>
+        </div>
+      </div>
+
+      <!-- Button -->
+      <button
+        class="plan-btn"
+        [disabled]="isActive(plan)"
+        (click)="selectPlan(plan)"
+      >
+        <span *ngIf="!isActive(plan)">
+          <i class="fa-solid fa-arrow-right"></i>
+          {{ plan.planName.includes('Free') ? 'Select Plan' : 'Upgrade to ' +
+          plan.planName }}
+        </span>
+
+        <span *ngIf="isActive(plan)">
+          <i class="fa-solid fa-check"></i>
+          Active Plan
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- FAQ Section -->
+  <div class="faq-section">
+    <h3 class="faq-title">
+      <i class="fa-solid fa-circle-question"></i>
+      Frequently Asked Questions
+    </h3>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <h4>Can I change my plan anytime?</h4>
+        <p>
+          Yes, you can upgrade or downgrade your plan at any time. Changes take
+          effect immediately.
+        </p>
+      </div>
+      <div class="faq-item">
+        <h4>How do discounts work?</h4>
+        <p>
+          Your plan discount is automatically applied at checkout on all
+          eligible products.
+        </p>
+      </div>
+      <div class="faq-item">
+        <h4>What happens if I cancel?</h4>
+        <p>
+          You'll keep your benefits until the end of your billing period, then
+          revert to the Free plan.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

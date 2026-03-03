@@ -9,6 +9,8 @@ import { Profile } from './pages/profile/profile';
 import { AuthGuard } from './guard/auth.guard';
 import { PrivacyPolicy } from './pages/privacy-policy/privacy-policy';
 import { TermsAndConditions } from './pages/terms-and-conditions/terms-and-conditions';
+import { Subscriptions } from './pages/subscriptions/subscriptions';
+import { PaymentSuccess } from './pages/payment-success/payment-success';
 
 export const routes: Routes = [
   {
@@ -22,9 +24,19 @@ export const routes: Routes = [
       import('./pages/auth/login/login').then((s) => s.Login),
   },
   {
-    path:'sign-up',
+    path: 'sign-up',
     loadComponent: () =>
       import('./pages/auth/sign-up/sign-up').then((s) => s.SignUp),
+  },
+  {
+    path: 'payment-success',
+    loadComponent: () =>
+      import('./pages/payment-success/payment-success').then(m => m.PaymentSuccess),
+  },
+  {
+    path: 'payment-error',
+    loadComponent: () =>
+      import('./pages/payment-error/payment-error').then(m => m.PaymentError),
   },
   {
     path: '',
@@ -40,6 +52,8 @@ export const routes: Routes = [
       { path: 'profile/orders', component: Profile, canActivate: [AuthGuard] },
       { path: 'privacy-policy', component: PrivacyPolicy },
       { path: 'terms-and-conditions', component: TermsAndConditions },
+      { path: 'subscriptions', component: Subscriptions },
+      { path: 'success', component: PaymentSuccess },
     ],
   },
   { path: '**', redirectTo: 'home' },
