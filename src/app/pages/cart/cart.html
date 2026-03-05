@@ -1,205 +1,258 @@
 <div class="cart-container container py-5" *ngIf="!showCelebration">
-    <h2 class="cart-title text-center mb-5 animate-magic">Your Cart 🛒</h2>
-  
-    <!-- If cart empty -->
-    <div *ngIf="cartItems.length === 0" class="no-products text-center">
-      <i class="fa-solid fa-box-open no-products-icon"></i>
-      <h4 class="mt-3">Your cart is empty</h4>
-      <p class="text-muted">Add some products to get started.</p>
-      <button class="btn btn-animated-info mt-3" routerLink="/products">
-        Browse Products
-      </button>
-    </div>
-  
-    <!-- If cart has items -->
-    <div class="row g-4" *ngIf="cartItems.length > 0">
-      <div
-        class="col-md-6 col-lg-4"
-        *ngFor="let item of cartItems; let i = index"
-      >
-        <div class="cart-card animate-scale" [ngClass]="{'out-of-stock-bg': item.outOfStock}">
-          <!-- Product Image -->
-          <div class="cart-image">
-            <img
-              (error)="handleImageError(item)"
-              [src]="item.imageUrl || 'assets/placeholder.png'"
-              alt="{{ item.productName }}"
-            />
-          </div>
-  
-          <!-- Body -->
-          <div class="cart-body">
-            <h5 class="cart-name">{{ item.productName }}</h5>
-            <div class="cart-desc">
-                <p>{{ item.productDescription }}</p>
-              </div>
-            <p class="cart-price">$ {{ item.price }}</p>
-  
-            <!-- Quantity Counter -->
-            <div class="quantity-control">
-              <button (click)="decreaseQuantity(item)">➖</button>
-              <span>{{ item.quantity }}</span>
-              <button (click)="increaseQuantity(item)">➕</button>
-            </div>
-  
-            <p class="cart-item-total">
-              Total: <strong>$ {{ item.itemTotal | number : '1.2-2' }}</strong>
-            </p>
-            <div *ngIf="item.outOfStock" class="out-of-stock-msg">
-              <span>❗ <b>Out of stock!</b> Only {{ item.availableQty }} available.</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  
-    <!-- Cart Summary -->
-    <div class="cart-summary animate-scale" *ngIf="cartItems.length > 0">
-      <div class="coupon-box mb-3 position-relative">
+  <h2 class="cart-title text-center mb-5 animate-magic">Your Cart 🛒</h2>
 
-    <label class="form-label coupon-label">Have a Coupon?</label>
+  <!-- If cart empty -->
+  <div *ngIf="cartItems.length === 0" class="no-products text-center">
+    <i class="fa-solid fa-box-open no-products-icon"></i>
+    <h4 class="mt-3">Your cart is empty</h4>
+    <p class="text-muted">Add some products to get started.</p>
+    <button class="btn btn-animated-info mt-3" routerLink="/products">
+      Browse Products
+    </button>
+  </div>
 
-    <div class="input-group coupon-input-group">
-      <input
-        type="text"
-        class="form-control coupon-input"
-        placeholder="Enter coupon code"
-        [(ngModel)]="couponCode"
-      />
-
-      <button
-        class="btn btn-animated-info apply-btn"
-        (click)="applyCoupon()"
-        *ngIf="couponCode && !(cartItems.length > 0 && cartItems[0]?.couponCode)"
-      >
-        Apply
-      </button>
-           <button
-        class="btn btn-animated-danger apply-btn"
-        (click)="removeCoupon()"
-        *ngIf="cartItems.length > 0 && cartItems[0]?.couponCode"
-      >
-        Remove
-      </button>
-    </div>
-
-    <!-- Success Animation -->
+  <!-- If cart has items -->
+  <div class="row g-4" *ngIf="cartItems.length > 0">
     <div
-      class="coupon-success animate-coupon-success"
-      *ngIf="couponResponse?.success"
+      class="col-md-6 col-lg-4"
+      *ngFor="let item of cartItems; let i = index"
     >
-      🎉 Coupon Applied Successfully!
-    </div>
+      <div
+        class="cart-card animate-scale"
+        [ngClass]="{'out-of-stock-bg': item.outOfStock}"
+      >
+        <!-- Product Image -->
+        <div class="cart-image">
+          <img
+            (error)="handleImageError(item)"
+            [src]="item.imageUrl || 'assets/placeholder.png'"
+            alt="{{ item.productName }}"
+          />
+        </div>
 
-    <!-- Error Box -->
-    <div *ngIf="couponResponse && couponResponse.success === false" class="coupon-error animate-coupon-error">
-     ! {{ couponResponse?.message }}
-    </div>
+        <!-- Body -->
+        <div class="cart-body">
+          <h5 class="cart-name">{{ item.productName }}</h5>
+          <div class="cart-desc">
+            <p>{{ item.productDescription }}</p>
+          </div>
+          <p class="cart-price">$ {{ item.price }}</p>
 
+          <!-- Quantity Counter -->
+          <div class="quantity-control">
+            <button (click)="decreaseQuantity(item)">➖</button>
+            <span>{{ item.quantity }}</span>
+            <button (click)="increaseQuantity(item)">➕</button>
+          </div>
+
+          <p class="cart-item-total">
+            Total: <strong>$ {{ item.itemTotal | number : '1.2-2' }}</strong>
+          </p>
+          <div *ngIf="item.outOfStock" class="out-of-stock-msg">
+            <span
+              >❗ <b>Out of stock!</b> Only {{ item.availableQty }}
+              available.</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-      <h4>
-        Grand Total:
-        <span class="text-highlight">
-          $ {{ totalAmount | number : '1.2-2' }}
-        </span>
-      </h4>
+  <!-- Cart Summary -->
+  <div class="cart-summary animate-scale" *ngIf="cartItems.length > 0">
+    <div class="coupon-box mb-3 position-relative">
+      <label class="form-label coupon-label">Have a Coupon?</label>
 
-      <!-- Show discount if applied -->
-      <div *ngIf="couponDiscount > 0" class="coupon-discount mt-2">
-        <span class="text-success">
-          - Discount Applied: ${{ couponDiscount | number : '1.2-2' }}
-        </span>
+      <div class="input-group coupon-input-group">
+        <input
+          type="text"
+          class="form-control coupon-input"
+          placeholder="Enter coupon code"
+          [(ngModel)]="couponCode"
+        />
+
+        <button
+          class="btn btn-animated-info apply-btn"
+          (click)="applyCoupon()"
+          *ngIf="couponCode && !(cartItems.length > 0 && cartItems[0]?.couponCode)"
+        >
+          Apply
+        </button>
+        <button
+          class="btn btn-animated-danger apply-btn"
+          (click)="removeCoupon()"
+          *ngIf="cartItems.length > 0 && cartItems[0]?.couponCode"
+        >
+          Remove
+        </button>
       </div>
 
-         <!-- Tax Amount -->
-      <h4 class="mt-3">
-        Tax Amount:
-        <span class="text-highlight">
-          $ {{ taxAmount | number : '1.2-2' }}
-        </span>
-      </h4>
-
- <!-- Show final total after discount with info icon -->
-      <div class="mt-3 position-relative d-flex align-items-center justify-content-center">
-        <h4>
-          <span>Final Total:</span>
-          <span class="text-highlight">
-            $ {{ discountedTotalAmount | number : '1.2-2' }}
-          </span>
-          <i 
-            class="fa-solid fa-info-circle price-info-icon"
-            (mouseenter)="showPriceBreakdown = true"
-            (mouseleave)="showPriceBreakdown = false"
-            (click)="showPriceBreakdown = !showPriceBreakdown"
-          ></i>
-        </h4>
-
-        <!-- Custom Tooltip/Popover -->
-        <div class="price-breakdown-popup" *ngIf="showPriceBreakdown">
-          <div class="popup-title"><strong>Price Breakdown</strong></div>
-          <hr>
-          <div class="popup-row">
-            <span>Subtotal:</span>
-            <span>${{ totalAmount | number : '1.2-2' }}</span>
-          </div>
-          <div class="popup-row text-success" *ngIf="couponDiscount > 0">
-            <span>Discount:</span>
-            <span>- ${{ couponDiscount | number : '1.2-2' }}</span>
-          </div>
-          <div class="popup-row" *ngIf="taxAmount > 0">
-            <span>Tax:</span>
-            <span>+ ${{ taxAmount | number : '1.2-2' }}</span>
-          </div>
-          <hr>
-          <div class="popup-row popup-total">
-            <span>Final Total:</span>
-            <span>${{ discountedTotalAmount | number : '1.2-2' }}</span>
-          </div>
-        </div>
+      <!-- Success Animation -->
+      <div
+        class="coupon-success animate-coupon-success"
+        *ngIf="couponResponse?.success"
+      >
+        🎉 Coupon Applied Successfully!
       </div>
 
-      <!-- Payment Section -->
-      <div class="mt-4 payment-section">
-        <label class="payment-label mb-3">Payment Method</label>
-
-        <!-- Google Pay / Apple Pay Button (shows if available) -->
-        <div *ngIf="canMakePayment" class="payment-request-section mb-3">
-          <div id="payment-request-button" class="payment-request-button-wrapper"></div>
-          <div class="payment-divider">
-            <span>OR PAY WITH CARD</span>
-          </div>
-        </div>
-
-        <!-- Card Details -->
-        <div class="card-payment-section">
-          <label class="card-label">Card Details</label>
-          <div id="card-element" class="stripe-card-element"></div>
-          <div id="card-errors" class="text-danger mt-1" role="alert"></div>
-          
-          <button 
-            class="btn btn-animated-info mt-3 w-100" 
-            (click)="createPayment()" 
-            [disabled]="getIsOutOfStock()"
+      <!-- Error Box -->
+      <div
+        *ngIf="couponResponse && couponResponse.success === false"
+        class="coupon-error animate-coupon-error"
+      >
+        ! {{ couponResponse?.message }}
+      </div>
+    </div>
+    <!-- Subscription Perks Banner -->
+    <div
+      class="subscription-perks-banner"
+      *ngIf="subscriptionDiscount > 0 || isFreeShipping"
+    >
+      <div class="perks-header">
+        <i class="fa-solid fa-crown perk-crown-icon"></i>
+        <span class="perks-plan-name">{{ currentPlanName }}</span>
+        <span class="perks-tag">Active</span>
+      </div>
+      <div class="perks-list">
+        <div class="perk-item" *ngIf="subscriptionDiscount > 0">
+          <i class="fa-solid fa-tag perk-icon"></i>
+          <span
+            ><strong>{{ subscriptionDiscount }}% off</strong> applied to your
+            order</span
           >
-            Pay with Card - ${{ discountedTotalAmount | number : '1.2-2' }}
-          </button>
+        </div>
+        <div class="perk-item" *ngIf="isFreeShipping">
+          <i class="fa-solid fa-truck perk-icon"></i>
+          <span><strong>Free Shipping</strong> on this order</span>
+        </div>
+      </div>
+    </div>
+    <h4>
+      Grand Total:
+      <span class="text-highlight">
+        $ {{ totalAmount | number : '1.2-2' }}
+      </span>
+    </h4>
+
+    <!-- Show discount if applied -->
+    <div *ngIf="couponDiscount > 0" class="coupon-discount mt-2">
+      <span class="text-success">
+        - Discount Applied: ${{ couponDiscount | number : '1.2-2' }}
+      </span>
+    </div>
+
+    <!-- Tax Amount -->
+    <h4 class="mt-3">
+      Tax Amount:
+      <span class="text-highlight"> $ {{ taxAmount | number : '1.2-2' }} </span>
+    </h4>
+
+    <!-- Show final total after discount with info icon -->
+    <div
+      class="mt-3 position-relative d-flex align-items-center justify-content-center"
+    >
+      <h4>
+        <span>Final Total:</span>
+        <span class="text-highlight">
+          $ {{ discountedTotalAmount | number : '1.2-2' }}
+        </span>
+        <i
+          class="fa-solid fa-info-circle price-info-icon"
+          (mouseenter)="showPriceBreakdown = true"
+          (mouseleave)="showPriceBreakdown = false"
+          (click)="showPriceBreakdown = !showPriceBreakdown"
+        ></i>
+      </h4>
+
+      <!-- Custom Tooltip/Popover -->
+    <div class="price-breakdown-popup" *ngIf="showPriceBreakdown">
+  <div class="popup-title"><strong>Price Breakdown</strong></div>
+  <hr>
+
+  <!-- Original price before any discount -->
+  <div class="popup-row">
+    <span>Original Price:</span>
+    <span>${{ originalSubTotal | number : '1.2-2' }}</span>
+  </div>
+
+  <!-- Subscription discount -->
+  <div class="popup-row text-plan" *ngIf="subscriptionDiscount > 0">
+    <span>{{ currentPlanName }} ({{ subscriptionDiscount }}%):</span>
+    <span>- ${{ (originalSubTotal * subscriptionDiscount / 100) | number : '1.2-2' }}</span>
+  </div>
+
+  <!-- After subscription discount = Grand Total -->
+  <div class="popup-row" *ngIf="subscriptionDiscount > 0">
+    <span>After Discount:</span>
+    <span>${{ totalAmount | number : '1.2-2' }}</span>
+  </div>
+
+  <!-- Coupon discount -->
+  <div class="popup-row text-success" *ngIf="couponDiscount > 0">
+    <span>Coupon:</span>
+    <span>- ${{ couponDiscount | number : '1.2-2' }}</span>
+  </div>
+
+  <!-- Tax -->
+  <div class="popup-row" *ngIf="taxAmount > 0">
+    <span>Tax (8.75%):</span>
+    <span>+ ${{ taxAmount | number : '1.2-2' }}</span>
+  </div>
+
+  <hr>
+  <div class="popup-row popup-total">
+    <span>Final Total:</span>
+    <span>${{ discountedTotalAmount | number : '1.2-2' }}</span>
+  </div>
+</div>
+    </div>
+
+    <!-- Payment Section -->
+    <div class="mt-4 payment-section">
+      <label class="payment-label mb-3">Payment Method</label>
+
+      <!-- Google Pay / Apple Pay Button (shows if available) -->
+      <div *ngIf="canMakePayment" class="payment-request-section mb-3">
+        <div
+          id="payment-request-button"
+          class="payment-request-button-wrapper"
+        ></div>
+        <div class="payment-divider">
+          <span>OR PAY WITH CARD</span>
         </div>
       </div>
 
-      <!-- Security Badge -->
-      <div class="security-badge mt-3 text-center">
-        <i class="fa-solid fa-lock"></i>
-        <small class="text-muted ms-2" style="color: white !important;">Secure payment powered by Stripe</small>
+      <!-- Card Details -->
+      <div class="card-payment-section">
+        <label class="card-label">Card Details</label>
+        <div id="card-element" class="stripe-card-element"></div>
+        <div id="card-errors" class="text-danger mt-1" role="alert"></div>
+
+        <button
+          class="btn btn-animated-info mt-3 w-100"
+          (click)="createPayment()"
+          [disabled]="getIsOutOfStock()"
+        >
+          Pay with Card - ${{ discountedTotalAmount | number : '1.2-2' }}
+        </button>
       </div>
     </div>
-  </div>
-  
 
-  <div class="celebration-overlay" *ngIf="showCelebration">
-    <canvas id="fireworksCanvas"></canvas>
-    <div class="congrats-box">
-      <h2>🎉 Congratulations! 🎉</h2>
-      <p>Your order has been placed successfully.</p>
+    <!-- Security Badge -->
+    <div class="security-badge mt-3 text-center">
+      <i class="fa-solid fa-lock"></i>
+      <small class="text-muted ms-2" style="color: white !important"
+        >Secure payment powered by Stripe</small
+      >
     </div>
   </div>
+</div>
+
+<div class="celebration-overlay" *ngIf="showCelebration">
+  <canvas id="fireworksCanvas"></canvas>
+  <div class="congrats-box">
+    <h2>🎉 Congratulations! 🎉</h2>
+    <p>Your order has been placed successfully.</p>
+  </div>
+</div>

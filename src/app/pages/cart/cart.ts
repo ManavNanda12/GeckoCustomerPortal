@@ -41,6 +41,10 @@ export class Cart implements OnInit, OnDestroy {
   paymentRequest: any;
   paymentRequestButton: any;
   canMakePayment: boolean = false;
+  subscriptionDiscount:any =0;
+  isFreeShipping:boolean = false;
+  currentPlanName:any;
+  originalSubTotal:any = 0;
 
   constructor(
     private readonly common: Common,
@@ -297,6 +301,8 @@ async initializeStripe(): Promise<void> {
           this.discountedTotalAmount = 0;
           this.taxAmount = 0;
           this.couponDiscount = 0;
+          this.subscriptionDiscount = 0;
+          this.isFreeShipping = false;
           this.common.setCartProductCount(0);
           return;
         }
@@ -341,9 +347,20 @@ async initializeStripe(): Promise<void> {
         // =============================
 
         this.totalAmount = cartSummary?.subTotal || 0;
-
         this.couponCode = cartSummary?.couponCode || null;
         this.couponDiscount = cartSummary?.discountAmount || 0;
+        this.subscriptionDiscount = cartSummary?.subscriptionDiscount || 0;
+        this.isFreeShipping = cartSummary?.isFreeShipping || false;
+        this.currentPlanName = cartSummary?.currentPlanName || '';
+        const originalSubTotal = cartSummary?.subTotal || 0;
+        this.totalAmount = originalSubTotal; // keep for display
+
+        // Store original for popup
+        this.originalSubTotal = originalSubTotal;
+
+        if (this.subscriptionDiscount > 0) {
+          this.totalAmount = originalSubTotal - (originalSubTotal * this.subscriptionDiscount / 100);
+        }
        this.ngZone.run(() => {
           this.updatePaymentRequestAmount();
         });
@@ -451,7 +468,9 @@ async initializeStripe(): Promise<void> {
       shippingSameAsBilling: true,
       orderNotes: '',
       stripePaymentStatus: status,
-      paymentIntentId: paymentIntentId
+      paymentIntentId: paymentIntentId,
+      subscriptionDiscountAmount: this.originalSubTotal * this.subscriptionDiscount / 100,
+      currentPlanName: this.currentPlanName
     };
     this.common
       .postData(this.api.Order.CheckOut, requestedModel)

@@ -887,3 +887,100 @@
   }
 
 }
+
+/* ===== Subscription Perks Banner ===== */
+.subscription-perks-banner {
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.08) 0%, rgba(255, 165, 0, 0.05) 100%);
+  border: 1px solid rgba(255, 215, 0, 0.35);
+  border-radius: 12px;
+  padding: 14px 18px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 18px rgba(255, 215, 0, 0.1);
+}
+
+.subscription-perks-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(255, 215, 0, 0.02) 10px,
+    rgba(255, 215, 0, 0.02) 20px
+  );
+  pointer-events: none;
+}
+
+.perks-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.perk-crown-icon {
+  color: #ffd700;
+  font-size: 16px;
+  animation: crownPulse 2s ease-in-out infinite;
+}
+
+@keyframes crownPulse {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.6)); }
+  50% { filter: drop-shadow(0 0 10px rgba(255, 215, 0, 1)); }
+}
+
+.perks-plan-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffd700;
+  letter-spacing: 0.5px;
+}
+
+.perks-tag {
+  background: rgba(255, 215, 0, 0.2);
+  color: #ffd700;
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  animation: tagGlow 2s ease-in-out infinite;
+}
+
+@keyframes tagGlow {
+  0%, 100% { box-shadow: 0 0 4px rgba(255, 215, 0, 0.3); }
+  50% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.6); }
+}
+
+.perks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.perk-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.perk-icon {
+  color: #ffd700;
+  font-size: 13px;
+  width: 16px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* Plan discount row in price breakdown popup */
+.popup-row.text-plan span {
+  color: #ffd700 !important;
+  font-weight: 600;
+}

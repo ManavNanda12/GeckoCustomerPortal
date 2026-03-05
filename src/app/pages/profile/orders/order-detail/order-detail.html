@@ -79,6 +79,33 @@
       </div>
     </div>
 
+    <!-- Subscription Plan Section -->
+    <div class="subscription-plan-card" *ngIf="orderDetails[0].planName">
+      <div class="subscription-header">
+        <div class="subscription-icon-wrapper">
+          <i class="fa-solid fa-crown"></i>
+        </div>
+        <div class="subscription-info">
+          <h4 class="subscription-title">{{ orderDetails[0].planName }}</h4>
+          <p class="subscription-subtitle">Active Subscription Benefits Applied</p>
+        </div>
+        <div class="subscription-badge">
+          <i class="fa-solid fa-percent"></i>
+          {{ orderDetails[0].subscriptionBenefitValue }}% OFF
+        </div>
+      </div>
+      <div class="subscription-benefits">
+        <div class="benefit-item">
+          <i class="fa-solid fa-check-circle"></i>
+          <span>{{ orderDetails[0].subscriptionBenefitValue }}% discount on all products</span>
+        </div>
+        <div class="benefit-item">
+          <i class="fa-solid fa-check-circle"></i>
+          <span>Subscription savings: ₹{{ orderDetails[0].subscriptionDiscount | number:'1.2-2' }}</span>
+        </div>
+      </div>
+    </div>
+
     <!-- Additional Info Section -->
     <div class="additional-info" *ngIf="orderDetails[0].stripePaymentStatus || orderDetails[0].transactionId">
       <div class="info-row" *ngIf="orderDetails[0].stripePaymentStatus">
@@ -167,11 +194,23 @@
         <span class="summary-value positive">+₹{{ orderDetails[0].shippingAmount | number:'1.2-2' }}</span>
       </div>
 
-      <div class="summary-row discount-row" *ngIf="orderDetails[0].discountAmount > 0">
+      <!-- Subscription Discount Row -->
+      <div class="summary-row subscription-discount-row" *ngIf="orderDetails[0].subscriptionDiscount > 0">
         <span class="summary-label">
-          <i class="fa-solid fa-tags"></i> Discount
-          <span *ngIf="orderDetails[0]?.couponCode" class="coupon-tag">
-            {{ orderDetails[0]?.couponCode }}
+          <i class="fa-solid fa-crown"></i> Subscription Discount
+          <span class="subscription-plan-tag">
+            {{ orderDetails[0].planName }}
+          </span>
+        </span>
+        <span class="summary-value subscription-discount">-₹{{ orderDetails[0].subscriptionDiscount | number:'1.2-2' }}</span>
+      </div>
+
+      <!-- Coupon Discount Row -->
+      <div class="summary-row discount-row" *ngIf="orderDetails[0].couponCode && orderDetails[0].discountAmount > 0">
+        <span class="summary-label">
+          <i class="fa-solid fa-tags"></i> Coupon Discount
+          <span class="coupon-tag">
+            {{ orderDetails[0].couponCode }}
           </span>
         </span>
         <span class="summary-value negative">-₹{{ orderDetails[0].discountAmount | number:'1.2-2' }}</span>
@@ -184,8 +223,28 @@
           <i class="fa-solid fa-money-bill-wave"></i> Grand Total
         </span>
         <span class="summary-value grand-total-value">
-          ₹{{ (orderDetails[0].total + orderDetails[0].taxAmount + orderDetails[0].shippingAmount - orderDetails[0].discountAmount) | number:'1.2-2' }}
+          ₹{{ (orderDetails[0].total + orderDetails[0].taxAmount + orderDetails[0].shippingAmount - (orderDetails[0].subscriptionDiscount || 0) - (orderDetails[0].discountAmount || 0)) | number:'1.2-2' }}
         </span>
+      </div>
+
+      <!-- Savings Summary -->
+      <div class="savings-summary" *ngIf="orderDetails[0].discountAmount > 0 || orderDetails[0].subscriptionDiscount > 0">
+        <div class="savings-icon">
+          <i class="fa-solid fa-piggy-bank"></i>
+        </div>
+        <div class="savings-content">
+          <span class="savings-label">You saved</span>
+          <span class="savings-amount">₹{{ ((orderDetails[0].subscriptionDiscount || 0) + (orderDetails[0].discountAmount || 0)) | number:'1.2-2' }}</span>
+          <span class="savings-breakdown" *ngIf="orderDetails[0].subscriptionDiscount > 0 && orderDetails[0].discountAmount > 0">
+            (Subscription: ₹{{ orderDetails[0].subscriptionDiscount | number:'1.2-2' }} + Coupon: ₹{{ orderDetails[0].discountAmount | number:'1.2-2' }})
+          </span>
+          <span class="savings-breakdown" *ngIf="orderDetails[0].subscriptionDiscount > 0 && !orderDetails[0].discountAmount">
+            (Subscription: ₹{{ orderDetails[0].subscriptionDiscount | number:'1.2-2' }})
+          </span>
+          <span class="savings-breakdown" *ngIf="!orderDetails[0].subscriptionDiscount && orderDetails[0].discountAmount > 0">
+            (Coupon: ₹{{ orderDetails[0].discountAmount | number:'1.2-2' }})
+          </span>
+        </div>
       </div>
     </div>
 
