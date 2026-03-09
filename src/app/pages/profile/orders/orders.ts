@@ -30,31 +30,33 @@ export class Orders implements OnInit {
   }
 
   getOrders() {
-    this.spinner.show();
-    let api = this.api.Order.GetOrderList.replace('{customerId}', localStorage.getItem('CustomerId') || '0');
-    this.common.getData(api).pipe().subscribe({
-      next: (response) => {
-        if (response.success) {
-          const result = Object.values(
-            response.data.reduce((acc: any, curr: any) => {
-              if (!acc[curr.id]) {
-                acc[curr.id] = { ...curr, itemCount: 0 };
-              }
-              acc[curr.id].itemCount += 1;
-              return acc;
-            }, {})
-          );
-          this.orderList = result;
+  this.spinner.show();
+  let api = this.api.Order.GetOrderList.replace('{customerId}', localStorage.getItem('CustomerId') || '0');
+  this.common.getData(api).pipe().subscribe({
+    next: (response) => {
+      if (response.success) {
+        const seen = new Set();
+        const result: any[] = [];
+        for (const item of response.data) {
+          if (!seen.has(item.id)) {
+            seen.add(item.id);
+            result.push({ ...item, itemCount: 1 });
+          } else {
+            const existing = result.find(r => r.id === item.id);
+            if (existing) existing.itemCount += 1;
+          }
         }
-      },
-      error: (error) => {
-        console.log(error);
-      },
-      complete: () => {
-        this.spinner.hide();
+        this.orderList = result; // order is exactly as API sent it
       }
-    });
-  }
+    },
+    error: (error) => {
+      console.log(error);
+    },
+    complete: () => {
+      this.spinner.hide();
+    }
+  });
+}
 
   // Order Status Methods
   getStatusClass(status: number): string {
