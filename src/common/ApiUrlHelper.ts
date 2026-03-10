@@ -66,4 +66,7 @@ export class ApiUrlHelper {
     GetPlanList:'plan/get-plan-list/{customerId}',
     CheckPlan:'plan/check-plan'
   }
+  Chat = {
+    ChatWithAgent:'chatbot/chat-agent'
+  }
 }

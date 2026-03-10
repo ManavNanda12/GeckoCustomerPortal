@@ -1,21 +1,41 @@
-<div class="main-layout">
-    <!-- Header -->
+<div class="main-layout" [class.chatbot-open]="isChatOpen">
     <app-header></app-header>
   
-    <!-- Main outlet with video background -->
     <div class="main-content">
-      <!-- Background Video -->
       <video autoplay muted loop playsinline class="bg-video" [muted]="true">
         <source src="/assets/videos/gym-bg.mp4" type="video/mp4"/>
       </video>
-  
-      <!-- Routed content -->
       <div class="content-overlay mt-5">
         <router-outlet></router-outlet>
       </div>
     </div>
   
-    <!-- Footer -->
     <app-footer></app-footer>
-  </div>
-  
+
+    <!-- Chatbot FAB + Panel -->
+    <div class="chatbot-wrapper">
+      <app-chatbot *ngIf="isChatOpen"></app-chatbot>
+      <button class="chatbot-fab" (click)="toggleChat()" [class.active]="isChatOpen" aria-label="Toggle Chatbot">
+        <span class="fab-icon fab-icon--robot" [class.hidden]="isChatOpen">
+          <!-- Robot Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+            <rect x="16" y="20" width="32" height="24" rx="6" fill="currentColor"/>
+            <rect x="22" y="27" width="8" height="7" rx="2" fill="#1e1e2f"/>
+            <rect x="34" y="27" width="8" height="7" rx="2" fill="#1e1e2f"/>
+            <rect x="28" y="38" width="8" height="3" rx="1.5" fill="#1e1e2f"/>
+            <rect x="30" y="12" width="4" height="8" rx="2" fill="currentColor"/>
+            <circle cx="32" cy="10" r="3" fill="currentColor"/>
+            <rect x="8" y="28" width="6" height="10" rx="3" fill="currentColor"/>
+            <rect x="50" y="28" width="6" height="10" rx="3" fill="currentColor"/>
+          </svg>
+        </span>
+        <span class="fab-icon fab-icon--close" [class.hidden]="!isChatOpen">
+          <!-- Close / X Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </span>
+      </button>
+    </div>
+</div>
