@@ -196,7 +196,7 @@
 
   <!-- Tax -->
   <div class="popup-row" *ngIf="taxAmount > 0">
-    <span>Tax (8.75%):</span>
+    <span>Tax ({{taxPercentage}}%):</span>
     <span>+ ${{ taxAmount | number : '1.2-2' }}</span>
   </div>
 
