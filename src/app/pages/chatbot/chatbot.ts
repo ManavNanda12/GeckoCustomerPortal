@@ -32,7 +32,7 @@ export class Chatbot implements OnInit, AfterViewChecked {
 
   constructor(
     private readonly api: ApiUrlHelper,
-    private readonly common: Common,
+    private readonly common: Common
   ) {}
 
   ngOnInit() {
@@ -145,6 +145,7 @@ export class Chatbot implements OnInit, AfterViewChecked {
       customerId: this.customerId,
       message: userMessage,
       history: this.buildMessageHistory(),
+      cartId: this.common.getSessionId()
     };
 
     this.common
