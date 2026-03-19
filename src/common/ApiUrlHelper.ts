@@ -29,7 +29,8 @@ export class ApiUrlHelper {
   }
   Customer = {
     GetCustomerDetails:'get-customer-by-id/{customerId}',
-    SaveCustomer:'save-customer'
+    SaveCustomer:'save-customer',
+    UpdateFCMToken:'update-fcm-token'
   }
   Wishlist = {
     SaveWishlist:'wishlist/save-wishlist-item',

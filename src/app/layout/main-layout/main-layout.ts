@@ -4,6 +4,7 @@ import { Footer } from "../../component/footer/footer";
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Chatbot } from '../../pages/chatbot/chatbot'; // adjust path
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -14,6 +15,11 @@ import { Chatbot } from '../../pages/chatbot/chatbot'; // adjust path
 export class MainLayout implements AfterViewInit {
 
   isChatOpen = false;
+
+  constructor(private readonly notificationService: NotificationService) {
+    this.notificationService.requestPermission();
+    this.notificationService.listen();
+  }
 
   toggleChat() {
     this.isChatOpen = !this.isChatOpen;

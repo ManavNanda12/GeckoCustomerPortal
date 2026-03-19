@@ -4,3 +4,9 @@ import { App } from './app/app';
 
 bootstrapApplication(App, appConfig)
   .catch((err) => console.error(err));
+
+  if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('firebase-messaging-sw.js')
+    .then((reg) => console.log('✅ SW registered', reg))
+    .catch(err => console.error('❌ SW failed', err));
+}
