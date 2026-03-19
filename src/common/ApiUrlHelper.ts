@@ -6,7 +6,8 @@ import { Injectable } from '@angular/core';
 
 export class ApiUrlHelper {
   Auth = {
-    Login: "login"
+    Login: "login",
+    GoogleLogin: "google-login"
   };
   Category = {
     GetCategories: "category/get-category-list"

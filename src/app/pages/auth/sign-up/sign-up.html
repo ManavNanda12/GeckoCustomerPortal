@@ -25,7 +25,10 @@
         <mat-error *ngIf="submitted && signUpForm.get('MobileNumber')?.invalid" class="text-danger">
           Mobile Number is required
         </mat-error>
-        <button class="mt-2 mb-2 signup-btn" type="submit">Sign Up</button>
+        <button class="mt-2 signup-btn" type="submit">Sign Up</button>
+        <div class="my-2">
+          <asl-google-signin-button type='standard' size='medium' theme="filled_black" logo_alignment="center" text="signup_with" ></asl-google-signin-button>
+        </div>
         <button type="button" class="login-btn" (click)="login()">Login</button>
       </form>
       </div>

@@ -1,20 +1,22 @@
 <div class="main-content">
-    <!-- Background Video -->
-    <video autoplay muted loop playsinline class="bg-video">
-      <source src="/assets/videos/gym-bg.mp4" type="video/mp4" />
-    </video>
-  
-    <!-- Content Overlay -->
-    <div class="content-overlay">
-      <div class="login-box">
-        <form [formGroup]="loginForm" (ngSubmit)="submitLoginForm()">
+  <!-- Background Video -->
+  <video autoplay muted loop playsinline class="bg-video">
+    <source src="/assets/videos/gym-bg.mp4" type="video/mp4" />
+  </video>
+
+  <!-- Content Overlay -->
+  <div class="content-overlay">
+    <div class="login-box">
+      <form [formGroup]="loginForm" (ngSubmit)="submitLoginForm()">
         <h2>Welcome Back</h2>
-        <input type="email" placeholder="Email" class="email-input" formControlName="email"/>
-        <input type="password" placeholder="Password" class="password-input" formControlName="password"/>
+        <input type="email" placeholder="Email" class="email-input" formControlName="email" />
+        <input type="password" placeholder="Password" class="password-input" formControlName="password" />
         <button type="submit" class="login-btn">Login</button>
-        <button class="mt-2 signup-btn" type="button" (click)="signUp()">Sign Up</button>
+        <div class="my-2">
+          <asl-google-signin-button type='standard' size='medium' theme="filled_black" logo_alignment="center" text="signin_with" ></asl-google-signin-button>
+        </div>
+        <button class="signup-btn" type="button" (click)="signUp()">Sign Up</button>
       </form>
-      </div>
     </div>
   </div>
-  
+</div>

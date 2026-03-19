@@ -111,13 +111,9 @@ export class Cart implements OnInit, OnDestroy {
         // Wait for Angular to render the template
         setTimeout(() => {
           const cardElement = document.getElementById('card-element');
-          console.log('Card element found:', !!cardElement);
-
           if (cardElement) {
             try {
               this.card.mount('#card-element');
-              console.log('Card element mounted successfully');
-
               this.card.on('change', (event: any) => {
                 const displayError = document.getElementById('card-errors');
                 if (displayError) {
@@ -274,7 +270,6 @@ export class Cart implements OnInit, OnDestroy {
       });
     } else {
       this.canMakePayment = false;
-      console.log('Google Pay / Apple Pay not available');
     }
   }
 
@@ -487,7 +482,6 @@ export class Cart implements OnInit, OnDestroy {
       .pipe()
       .subscribe({
         next: (res) => {
-          console.log(res);
           if (res.success) {
             this.showCelebration = true;
             setTimeout(() => {
@@ -748,7 +742,6 @@ export class Cart implements OnInit, OnDestroy {
             });
 
             if (result.error) {
-              console.log(result.error.message);
               this.toastr.error(result.error.message || 'Payment failed');
               this.spinner.hide();
             } else {

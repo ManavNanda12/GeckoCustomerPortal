@@ -26,7 +26,6 @@ export class OrderDetail {
     private readonly toastr: ToastrService
   ) {
     this.orderId = inject(MAT_DIALOG_DATA).orderId;
-    console.log(this.orderId);
     this.getOrderDetails();
   }
 
@@ -37,7 +36,6 @@ export class OrderDetail {
       next: (response) => {
         if (response.success) {
           this.orderDetails = response.data;
-          console.log(this.orderDetails);
         }
       },
       error: (error) => {

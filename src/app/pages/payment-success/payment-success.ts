@@ -13,8 +13,6 @@ export class PaymentSuccess {
 
   ngOnInit() {
     const sessionId = this.route.snapshot.queryParamMap.get('session_id');
-    console.log(sessionId);
-
     setTimeout(() => {
       this.router.navigate(['/subscriptions']);
     }, 3000);
