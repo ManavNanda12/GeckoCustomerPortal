@@ -1,4 +1,11 @@
+<!-- CORRECTED: Full-screen loader -->
 <ngx-spinner
-template="<img src='../assets/icons/spinner.gif' />"
-></ngx-spinner>
+  [fullScreen]="true"
+  bdColor="rgba(0,0,0,0)"
+  color="transparent"
+>
+  <app-gym-loader></app-gym-loader>
+</ngx-spinner>
+
+<!-- Only one router-outlet needed -->
 <router-outlet></router-outlet>

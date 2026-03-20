@@ -54,7 +54,9 @@ export class Header {
       error: (err: any) => {
         this.toastr.error("Failed to fetch cart details", "Error");
       },
-      complete: () => { this.spinner.hide(); }
+      complete: () => { 
+        this.spinner.hide(); 
+      }
     })
   }
 

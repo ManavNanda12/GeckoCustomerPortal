@@ -32,7 +32,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideSpinnerConfig({ type: 'ball-scale-multiple' }),
+    provideSpinnerConfig({}),
     provideToastr({ positionClass: 'toast-top-right' }),
     provideAnimationsAsync(),
     provideHttpClient(),

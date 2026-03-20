@@ -1,0 +1,420 @@
+/* ================================================
+   FIXED FULL-SCREEN GYM LOADER - Proper Overlay
+   ================================================ */
+
+/* === Overlay Container - FULL SCREEN === */
+.loader-overlay {
+   /* Must be fixed, not absolute */
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.85) !important;
+  backdrop-filter: blur(12px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(150%) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 99999 !important;  /* Very high z-index to be above everything */
+  gap: 25px;
+  animation: fadeInBlur 0.3s ease-in-out;
+  pointer-events: all; /* Block all interactions */
+
+  .loading-text {
+    color: #ffffff;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-top: 25px;
+    animation: fadeInOut 1.5s ease-in-out infinite;
+    text-shadow: 0 3px 15px rgba(0, 255, 255, 0.7);
+    letter-spacing: 0.5px;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  @keyframes fadeInBlur {
+    from {
+      opacity: 0;
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
+    }
+    to {
+      opacity: 1;
+      backdrop-filter: blur(12px) saturate(150%);
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
+    }
+  }
+
+  @keyframes fadeInOut {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+}
+
+/* ================================
+   LOADER 1: Spinning Dumbbell
+   ================================ */
+.dumbbell-loader {
+  width: 120px;
+  height: 40px;
+  position: relative;
+  animation: spin 2s linear infinite;
+  filter: drop-shadow(0 0 15px rgba(102, 126, 234, 0.8));
+}
+
+.dumbbell-loader::before,
+.dumbbell-loader::after {
+  content: '';
+  position: absolute;
+  width: 35px;
+  height: 40px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 5px;
+  top: 0;
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+}
+
+.dumbbell-loader::before {
+  left: 0;
+}
+
+.dumbbell-loader::after {
+  right: 0;
+}
+
+.dumbbell-loader .bar {
+  position: absolute;
+  width: 50px;
+  height: 10px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 5px;
+  box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ================================
+   LOADER 2: Barbell Lift
+   ================================ */
+.barbell-loader {
+  width: 140px;
+  height: 80px;
+  position: relative;
+  filter: drop-shadow(0 0 15px rgba(102, 126, 234, 0.8));
+}
+
+.barbell {
+  width: 140px;
+  height: 8px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  animation: lift 1.5s ease-in-out infinite;
+  border-radius: 4px;
+  box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+}
+
+.barbell::before,
+.barbell::after {
+  content: '';
+  position: absolute;
+  width: 30px;
+  height: 45px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 5px;
+  box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+}
+
+.barbell::before {
+  left: 0;
+}
+
+.barbell::after {
+  right: 0;
+}
+
+@keyframes lift {
+  0%, 100% { 
+    top: 60%;
+    filter: brightness(1);
+  }
+  50% { 
+    top: 30%;
+    filter: brightness(1.4);
+  }
+}
+
+/* ================================
+   LOADER 3: Bouncing Weights
+   ================================ */
+.weights-loader {
+  display: flex;
+  gap: 15px;
+  align-items: flex-end;
+  height: 100px;
+  filter: drop-shadow(0 0 15px rgba(102, 126, 234, 0.8));
+}
+
+.weight {
+  width: 25px;
+  height: 60px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 5px;
+  animation: bounce 1.2s ease-in-out infinite;
+  box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+}
+
+.weight:nth-child(1) { animation-delay: 0s; }
+.weight:nth-child(2) { animation-delay: 0.2s; }
+.weight:nth-child(3) { animation-delay: 0.4s; }
+.weight:nth-child(4) { animation-delay: 0.6s; }
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+    height: 60px;
+  }
+  50% {
+    transform: translateY(-30px);
+    height: 70px;
+  }
+}
+
+/* ================================
+   LOADER 4: Kettlebell Swing
+   ================================ */
+.kettlebell-loader {
+  width: 80px;
+  height: 100px;
+  position: relative;
+  filter: drop-shadow(0 0 15px rgba(102, 126, 234, 0.8));
+}
+
+.kettlebell {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform-origin: top center;
+  animation: swing 1.5s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.6);
+}
+
+.kettlebell::before {
+  content: '';
+  width: 30px;
+  height: 20px;
+  background: transparent;
+  border: 4px solid #667eea;
+  border-bottom: none;
+  border-radius: 20px 20px 0 0;
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+}
+
+@keyframes swing {
+  0%, 100% {
+    transform: translateX(-50%) rotate(-30deg);
+  }
+  50% {
+    transform: translateX(-50%) rotate(30deg);
+  }
+}
+
+/* ================================
+   LOADER 5: Pulsing Muscle
+   ================================ */
+.muscle-loader {
+  width: 90px;
+  height: 90px;
+  position: relative;
+  filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.9));
+}
+
+.muscle {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  position: relative;
+  animation: pulse 1s ease-in-out infinite;
+  box-shadow: 0 0 30px rgba(102, 126, 234, 0.7);
+}
+
+.muscle::before {
+  content: '💪';
+  position: absolute;
+  font-size: 45px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  filter: brightness(2);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.85;
+  }
+}
+
+/* ================================
+   LOADER 6: Loading Bar Progress
+   ================================ */
+.progress-loader {
+  width: 220px;
+  height: 35px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+  border: 2px solid rgba(102, 126, 234, 0.3);
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+  background-size: 200% 100%;
+  animation: progress 2s ease-in-out infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  box-shadow: 0 0 25px rgba(102, 126, 234, 0.7);
+  letter-spacing: 1px;
+}
+
+@keyframes progress {
+  0% {
+    width: 0%;
+    background-position: 0% 50%;
+  }
+  50% {
+    width: 100%;
+    background-position: 100% 50%;
+  }
+  100% {
+    width: 0%;
+    background-position: 0% 50%;
+  }
+}
+
+/* ================================
+   LOADER 7: Rotating Plates
+   ================================ */
+.plates-loader {
+  width: 110px;
+  height: 110px;
+  position: relative;
+  filter: drop-shadow(0 0 15px rgba(102, 126, 234, 0.8));
+}
+
+.plate {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 9px solid transparent;
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: rotate 1.5s linear infinite;
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+}
+
+.plate:nth-child(2) {
+  width: 70%;
+  height: 70%;
+  top: 15%;
+  left: 15%;
+  border-top-color: #764ba2;
+  border-width: 7px;
+  animation-duration: 1s;
+  animation-direction: reverse;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ================================
+   LOADER 8: Dots Lifting
+   ================================ */
+.dots-loader {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  filter: drop-shadow(0 0 15px rgba(102, 126, 234, 0.8));
+}
+
+.dot {
+  width: 18px;
+  height: 18px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  animation: dotLift 1s ease-in-out infinite;
+  box-shadow: 0 0 15px rgba(102, 126, 234, 0.6);
+}
+
+.dot:nth-child(1) { animation-delay: 0s; }
+.dot:nth-child(2) { animation-delay: 0.2s; }
+.dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dotLift {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-35px); }
+}
+
+/* === Responsive === */
+@media (max-width: 576px) {
+  .loading-text {
+    font-size: 1.1rem;
+    padding: 0 20px;
+    text-align: center;
+  }
+
+  .dumbbell-loader,
+  .barbell-loader {
+    transform: scale(0.85);
+  }
+
+  .loader-overlay {
+    backdrop-filter: blur(10px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(150%) !important;
+  }
+}
+
+/* === Fallback for browsers that don't support backdrop-filter === */
+@supports not (backdrop-filter: blur(12px)) {
+  .loader-overlay {
+    background: rgba(0, 0, 0, 0.92) !important;
+  }
+}
+
+/* === Override any conflicting styles === */
+ngx-spinner .loader-overlay {
+  position: fixed !important;
+  z-index: 99999 !important;
+}

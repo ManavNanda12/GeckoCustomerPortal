@@ -1,0 +1,59 @@
+<div class="loader-overlay">
+  <!-- Loader 1: Spinning Dumbbell -->
+   @if (selectedLoader === 1) {
+    <div class="dumbbell-loader">
+        <div class="bar"></div>
+  </div>
+   }
+
+   @else if (selectedLoader === 2) {
+     <div class="barbell-loader">
+        <div class="barbell"></div>
+     </div>
+   }
+
+  @else if (selectedLoader === 3) {
+  <div class="weights-loader">
+    <div class="weight"></div>
+    <div class="weight"></div>
+    <div class="weight"></div>
+    <div class="weight"></div>
+  </div>
+  }
+
+  @else if (selectedLoader === 4) {
+  <div  class="kettlebell-loader">
+    <div class="kettlebell"></div>
+  </div>
+}
+
+  @else if (selectedLoader === 5) {
+  <div class="muscle-loader">
+    <div class="muscle"></div>
+  </div>
+}
+
+  @else if (selectedLoader === 6) {
+  <div class="progress-loader">
+    <div class="progress-bar">LOADING...</div>
+  </div>
+}
+
+  <!-- Loader 7: Rotating Plates -->
+  @else if (selectedLoader === 7) {
+  <div class="plates-loader">
+    <div class="plate"></div>
+    <div class="plate"></div>
+  </div>
+}
+
+  <!-- Loader 8: Lifting Dots -->
+  @else if (selectedLoader === 8) {
+  <div class="dots-loader">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+}
+  <p class="loading-text">{{ selectedMessage }}</p>
+</div>
