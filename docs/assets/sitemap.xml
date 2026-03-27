@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Main Pages -->
+  <url>
+    <loc>https://geckocustomer.netlify.app/</loc>
+  </url>
+
+  <url>
+    <loc>https://geckocustomer.netlify.app/home</loc>
+  </url>
+
+  <url>
+    <loc>https://geckocustomer.netlify.app/category</loc>
+  </url>
+
+  <url>
+    <loc>https://geckocustomer.netlify.app/products</loc>
+  </url>
+
+  <url>
+    <loc>https://geckocustomer.netlify.app/contact</loc>
+  </url>
+
+  <!-- Auth Pages -->
+  <url>
+    <loc>https://geckocustomer.netlify.app/login</loc>
+  </url>
+
+  <url>
+    <loc>https://geckocustomer.netlify.app/sign-up</loc>
+  </url>
+
+  <!-- Legal Pages -->
+  <url>
+    <loc>https://geckocustomer.netlify.app/privacy-policy</loc>
+  </url>
+
+  <url>
+    <loc>https://geckocustomer.netlify.app/terms-and-conditions</loc>
+  </url>
+
+  <!-- Features -->
+  <url>
+    <loc>https://geckocustomer.netlify.app/subscriptions</loc>
+  </url>
+
+  <!-- Payment Pages -->
+  <url>
+    <loc>https://geckocustomer.netlify.app/payment-success</loc>
+  </url>
+
+  <url>
+    <loc>https://geckocustomer.netlify.app/payment-error</loc>
+  </url>
+
+</urlset>
