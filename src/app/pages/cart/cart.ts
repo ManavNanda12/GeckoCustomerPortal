@@ -54,7 +54,7 @@ export class Cart implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly api: ApiUrlHelper,
     private readonly ngZone: NgZone,
-  ) {}
+  ) { }
 
   async ngOnInit(): Promise<void> {
     this.customerId = Number(localStorage.getItem('CustomerId')) || 0;
@@ -328,9 +328,9 @@ export class Cart implements OnInit, OnDestroy {
 
             item.availableQty = isOutOfStock
               ? item.maxAvailableQuantity ||
-                item.availableQuantity ||
-                item.stockQuantity ||
-                0
+              item.availableQuantity ||
+              item.stockQuantity ||
+              0
               : null;
           });
 
@@ -484,6 +484,7 @@ export class Cart implements OnInit, OnDestroy {
         next: (res) => {
           if (res.success) {
             this.showCelebration = true;
+            this.triggerOrderAutomation(res.data.orderId);
             setTimeout(() => {
               this.ngZone.runOutsideAngular(() => {
                 this.startFireworks();
@@ -764,4 +765,168 @@ export class Cart implements OnInit, OnDestroy {
         },
       });
   }
+
+  triggerOrderAutomation(orderId: number) {
+  const orderApi = this.api.Order.GetOrderDetails.replace('{orderId}', orderId.toString());
+ 
+  this.common.getData(orderApi).subscribe({
+    next: (orderResponse) => {
+      if (!orderResponse.success || !orderResponse.data?.length) return;
+ 
+      const orderDetails = orderResponse.data;
+      const order = orderDetails[0];
+ 
+      const customerApi = this.api.Customer.GetCustomerDetails.replace(
+        '{customerId}',
+        this.customerId.toString()
+      );
+ 
+      this.common.getData(customerApi).subscribe({
+        next: (customerResponse) => {
+          if (!customerResponse.success) return;
+ 
+          const customer = customerResponse.data;
+ 
+          const itemRowsHtml = orderDetails.map((item: any) => `
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+              <td style="padding:16px 14px 16px 0;vertical-align:middle;width:52px;">
+                <img style="width:48px;height:48px;border-radius:10px;object-fit:cover;border:1px solid rgba(0,255,255,0.2);background:#1a1a1a;display:block;"
+                     src="${item.imageUrl || ''}" alt="${item.productName}" />
+              </td>
+              <td style="padding:16px 0;vertical-align:middle;">
+                <div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:3px;">${item.productName}</div>
+                <div style="font-size:12px;color:#666;max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item.productDescription || ''}</div>
+              </td>
+              <td style="padding:16px 0;vertical-align:middle;text-align:center;">
+                <span style="display:inline-block;background:rgba(0,255,255,0.1);color:#00ffff;border:1px solid rgba(0,255,255,0.25);border-radius:6px;padding:3px 10px;font-size:13px;font-weight:600;">${item.quantity}</span>
+              </td>
+              <td style="padding:16px 0;vertical-align:middle;font-size:13px;color:#aaa;">&#8377;${item.unitPrice.toFixed(2)}</td>
+              <td style="padding:16px 0;vertical-align:middle;font-size:14px;font-weight:700;color:#00bcd4;text-align:right;">&#8377;${item.lineTotal.toFixed(2)}</td>
+            </tr>
+          `).join('');
+ 
+          const subscriptionDiscountRow = (order.subscriptionDiscount > 0) ? `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.04);">
+              <span style="color:#888;">Subscription Discount
+                <span style="display:inline-block;padding:2px 8px;border-radius:8px;font-size:11px;font-weight:700;margin-left:8px;letter-spacing:0.5px;vertical-align:middle;background:linear-gradient(90deg,#ffd700,#ffa500);color:#000;">${order.planName}</span>
+              </span>
+              <span style="color:#ffd700;font-weight:500;">-&#8377;${order.subscriptionDiscount.toFixed(2)}</span>
+            </div>
+          ` : '';
+ 
+          const couponDiscountRow = (order.discountAmount > 0 && order.couponCode) ? `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.04);">
+              <span style="color:#888;">Coupon Discount
+                <span style="display:inline-block;padding:2px 8px;border-radius:8px;font-size:11px;font-weight:700;margin-left:8px;letter-spacing:0.5px;vertical-align:middle;background:linear-gradient(90deg,#e74c3c,#c0392b);color:#fff;">${order.couponCode}</span>
+              </span>
+              <span style="color:#4caf50;font-weight:500;">-&#8377;${order.discountAmount.toFixed(2)}</span>
+            </div>
+          ` : '';
+ 
+          const totalSavingsAmount = (order.subscriptionDiscount || 0) + (order.discountAmount || 0);
+ 
+          const savingsBanner = totalSavingsAmount > 0 ? `
+            <div style="background:linear-gradient(135deg,rgba(76,175,80,0.12),rgba(139,195,74,0.08));border:1px solid rgba(76,175,80,0.3);border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:14px;margin-bottom:28px;">
+              <div style="font-size:28px;">&#x1F437;</div>
+              <div>
+                <div style="font-size:12px;color:#81c784;text-transform:uppercase;letter-spacing:1px;">You saved on this order</div>
+                <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#4caf50;">&#8377;${totalSavingsAmount.toFixed(2)}</div>
+              </div>
+            </div>
+          ` : '';
+ 
+          const makePayload = {
+            customerName: `${customer.firstName} ${customer.lastName}`,
+            customerEmail: customer.email || '',
+            orderId: order.id,
+            orderDate: new Date(order.createdAt).toLocaleDateString('en-IN', {
+              day: '2-digit', month: 'short', year: 'numeric'
+            }),
+            orderStatus: this.getOrderStatusText(order.orderStatus),
+            paymentStatus: this.getPaymentStatusText(order.paymentStatus),
+            paymentMethod: order.paymentMethod || 'Card Payment',
+            transactionId: order.transactionId || '',
+            total: order.total.toFixed(2),
+            taxAmount: order.taxAmount.toFixed(2),
+            shippingAmount: order.shippingAmount.toFixed(2),
+            discountAmount: order.discountAmount?.toFixed(2) || '0.00',
+            subscriptionDiscount: order.subscriptionDiscount?.toFixed(2) || '0.00',
+            couponCode: order.couponCode || '',
+            planName: order.planName || '',
+            grandTotal: (
+              order.total +
+              order.taxAmount +
+              order.shippingAmount -
+              (order.subscriptionDiscount || 0) -
+              (order.discountAmount || 0)
+            ).toFixed(2),
+            totalSavings: totalSavingsAmount.toFixed(2),
+            orderTrackingUrl: `${window.location.origin}/profile/orders`,
+            itemRowsHtml: itemRowsHtml,
+            subscriptionDiscountRow: subscriptionDiscountRow,
+            couponDiscountRow: couponDiscountRow,
+            savingsBanner: savingsBanner,
+          };
+ 
+          this.callMakeWebhook(makePayload);
+        },
+        error: (err) => {
+          console.error('Failed to fetch customer details:', err);
+        }
+      });
+    },
+    error: (err) => {
+      console.error('Failed to fetch order for automation:', err);
+    }
+  });
+}
+ 
+callMakeWebhook(payload: any) {
+  const makeWebhookUrl = 'https://hook.eu1.make.com/5c7pwzn2xg5kbbnt5evj1fa1e2lf64d2';
+ 
+  fetch(makeWebhookUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  })
+    .then(res => {
+      if (res.ok) {
+        console.log('✅ Make.com scenario triggered successfully');
+      } else {
+        console.warn('⚠️ Make.com webhook responded with:', res.status);
+      }
+    })
+    .catch(err => {
+      console.error('Make.com webhook failed:', err);
+    });
+}
+ 
+getOrderStatusText(status: number): string {
+  const textMap: any = {
+    1: 'Pending',
+    2: 'Processing',
+    3: 'Shipped',
+    4: 'Delivered',
+    5: 'Cancelled'
+  };
+  return textMap[status] || 'Unknown';
+}
+ 
+getPaymentStatusText(paymentStatus: number | string): string {
+  if (typeof paymentStatus === 'string') {
+    return paymentStatus.charAt(0).toUpperCase() + paymentStatus.slice(1);
+  } else {
+    const textMap: any = {
+      0: 'Pending',
+      1: 'Paid',
+      2: 'Failed',
+      3: 'Canceled'
+    };
+    return textMap[paymentStatus] || 'Pending';
+  }
+}
+
+
 }
