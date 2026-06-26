@@ -595,13 +595,19 @@
 
 /* === Accessibility === */
 @media (prefers-reduced-motion: reduce) {
-  .subscriptions-container::before,
+  /* .subscriptions-container::before,
   .subscriptions-container::after,
   .plan-card {
     animation: none;
-  }
+  } */
 
-  .main-title {
+  /* animation is what fades the card in, so restore its end state */
+  /* .plan-card {
+    opacity: 1;
+    transform: none;
+  } */
+
+  /* .main-title {
     animation: none;
-  }
+  } */
 }
