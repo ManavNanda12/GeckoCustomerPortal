@@ -603,8 +603,8 @@
 }
 
 /* === Accessibility === */
-@media (prefers-reduced-motion: reduce) {
-  .order-container::before,
+/* @media (prefers-reduced-motion: reduce) { */
+  /* .order-container::before,
   .order-container::after,
   .order-item,
   .empty-icon {
@@ -618,8 +618,8 @@
   .order-card.payment-succeeded,
   .order-card.payment-failed {
     animation: none;
-  }
-}
+  } */
+/* } */
 
 /* === Loading State === */
 .order-loading {
